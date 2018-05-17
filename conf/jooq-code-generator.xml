@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.9.6.xsd">
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://localhost/postgres</url>
+        <user>postgres</user>
+        <password>postgres</password>
+    </jdbc>
+    <generator>
+        <name>org.jooq.util.ScalaGenerator</name>
+        <database>
+            <name>org.jooq.util.postgres.PostgresDatabase</name>
+            <inputSchema>public</inputSchema>
+            <includes>.*</includes>
+            <excludes></excludes>
+            <customTypes>
+                <customType>
+                    <name>JodaDateTime</name>
+                    <type>org.joda.time.DateTime</type>
+                    <converter>library.jooq.JodaDateTimeConverter</converter>
+                </customType>
+                <customType>
+                    <name>JsValue</name>
+                    <type>play.api.libs.json.JsValue</type>
+                    <converter>library.jooq.JsValueConverter</converter>
+                </customType>
+            </customTypes>
+            <forcedTypes>
+                <forcedType>
+                    <name>JodaDateTime</name>
+                    <types>TIMESTAMP</types>
+                </forcedType>
+                <!--<forcedType>-->
+                    <!--<name>JsValue</name>-->
+                    <!--<types>JSONB</types>-->
+                <!--</forcedType>-->
+                <forcedType>
+                    <userType>play.api.libs.json.JsValue</userType>
+
+                    <!-- Associate that custom type with your binding. -->
+                    <binding>library.jooq.PostgresJsonJsValueBinding</binding>
+
+                    <!-- Add a Java regular expression matching fully-qualified columns. Use the pipe to separate several expressions.
+
+                         If provided, both "expressions" and "types" must match. -->
+                    <!--<expression>jsonb</expression>-->
+
+                    <!-- Add a Java regular expression matching data types to be forced to
+                         have this type.
+
+                         Data types may be reported by your database as:
+                          - NUMBER              regexp suggestion: NUMBER
+                          - NUMBER(5)           regexp suggestion: NUMBER\(5\)
+                          - NUMBER(5, 2)        regexp suggestion: NUMBER\(5,\s*2\)
+                          - any other form
+
+                         It is thus recommended to use defensive regexes for types.
+
+                         If provided, both "expressions" and "types" must match. -->
+                    <!--<types>.*</types>-->
+                    <types>jsonb</types>
+                </forcedType>
+            </forcedTypes>
+        </database>
+        <target>
+            <packageName>backend.jooq.generated</packageName>
+            <directory>app</directory>
+        </target>
+
+        <strategy>
+            <name>org.jooq.util.DefaultGeneratorStrategy</name>
+            <matchers>
+                <tables>
+                    <table>
+                        <expression>^(.*?)(s*)$</expression>
+                        <pojoClass>
+                            <transform>PASCAL</transform>
+                            <expression>$1_Model</expression>
+                        </pojoClass>
+                    </table>
+                </tables>
+            </matchers>
+
+        </strategy>
+        <generate>
+            <relations>true</relations>
+
+            <!-- Generate deprecated code for backwards compatibility
+                 Defaults to true -->
+            <deprecated>true</deprecated>
+
+            <!-- Do not reuse this property. It is deprecated as of jOOQ 3.3.0 -->
+            <instanceFields>true</instanceFields>
+
+            <!-- Generate the javax.annotation.Generated annotation to indicate
+                 jOOQ version used for source code.
+                 Defaults to true -->
+            <generatedAnnotation>true</generatedAnnotation>
+
+            <!-- Generate jOOQ Record classes for type-safe querying. You can
+                 turn this off, if you don't need "active records" for CRUD
+                 Defaults to true -->
+            <records>true</records>
+
+            <pojos>false</pojos>
+
+            <!-- Generate immutable POJOs for usage of the ResultQuery.fetchInto(Class) API
+                 This overrides any value set in <pojos/>
+                 Defaults to false -->
+            <immutablePojos>false</immutablePojos>
+
+            <globalObjectReferences>true</globalObjectReferences>
+        </generate>
+    </generator>
+</configuration>

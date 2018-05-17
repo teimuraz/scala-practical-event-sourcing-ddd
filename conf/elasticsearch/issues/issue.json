@@ -1,0 +1,13 @@
+{
+  "issue": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "created": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss"
+      }
+    }
+  }
+}

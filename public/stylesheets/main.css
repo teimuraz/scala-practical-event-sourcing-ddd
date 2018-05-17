@@ -1,0 +1,34 @@
+.app-landing-main-section {
+    position: fixed;
+    top: 3.7rem;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url(../images/landing-background.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
+
+.app-landing-layout .app-top-menu {
+}
+
+.app-top-menu input {
+    background-color: #ddd;
+}
+
+.app-landing {
+    padding-top: 5rem;
+}
+
+.app-content {
+    margin-top: 40px;
+}
+
+.app-top-menu .app-sign-out {
+    cursor: pointer;
+}
+
+input {
+    /*background-color: #fafbfc !important;*/
+}
