@@ -1,3 +1,8 @@
+TODO::
+Describe bounded contexts and why we have api level events and domain
+level events, anw why Api level events fields are not Domain Typed.
+(Like MemberId, MemberName, etc)
+
 [<img src="https://img.shields.io/travis/playframework/play-scala-starter-example.svg"/>](https://travis-ci.org/playframework/play-scala-starter-example)
 
 # Upster

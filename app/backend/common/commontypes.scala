@@ -1,5 +1,6 @@
 package backend.common
 
+import library.error.ValidationException
 import library.validation.{DefaultMessage, EmailValidatable, StringValidatable}
 import play.api.libs.json.Reads.email
 import play.api.libs.json._
@@ -68,4 +69,27 @@ object Password extends StringValidatable[Password] {
   override def inst = new Password(_)
   implicit val reads: Reads[Password] = Reads.of[String].map(v => Password(v.trim))
   implicit val writes: Writes[Password] = (o: Password) => JsString(o.value)
+}
+
+
+sealed trait MemberRole
+case object Owner extends MemberRole
+case object StandardMember extends MemberRole
+
+object MemberRole {
+  def valueOf(value: Int): MemberRole = {
+    value match {
+      case 1 => StandardMember
+      case 100 => Owner
+      case _ => throw new ValidationException(s"Not supported member role: $value")
+    }
+  }
+
+  def intValueOf(role: MemberRole): Int = role match {
+    case StandardMember => 1
+    case Owner => 100
+  }
+
+  implicit val reads: Reads[MemberRole] = Reads.of[Int].map(valueOf)
+  implicit val writes: Writes[MemberRole] = (o: MemberRole) => JsNumber(intValueOf(o))
 }

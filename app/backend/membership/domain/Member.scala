@@ -1,6 +1,6 @@
 package backend.membership.domain
 
-import backend.common.Email
+import backend.common.{Email, MemberRole, Owner, StandardMember}
 import library.error.{ForbiddenException, ValidationException}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
@@ -32,6 +32,14 @@ case class Member private(
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
     }
   })
+
+  def createNewMember(id: MemberId, name: MemberName, email: Email): Try[Member] = Try({
+    role match {
+      case Owner => Member.create(id, name, email, StandardMember, DateTime.now())
+      case _ => throw new ForbiddenException("Only owner cane create new members")
+    }
+  })
+
 
   override def applyEvent(event: MemberEvent): Member = {
     event match {
@@ -72,26 +80,5 @@ object MemberName extends StringValidatable[MemberName] {
   implicit val writes: Writes[MemberName] = (o: MemberName) => JsString(o.value)
 }
 
-sealed trait MemberRole
-case object Owner extends MemberRole
-case object StandardMember extends MemberRole
-
-object MemberRole {
-  def valueOf(value: Int): MemberRole = {
-    value match {
-      case 1 => StandardMember
-      case 100 => Owner
-      case _ => throw new ValidationException(s"Not supported member role: $value")
-    }
-  }
-
-  def intValueOf(role: MemberRole): Int = role match {
-    case StandardMember => 1
-    case Owner => 100
-  }
-
-  implicit val reads: Reads[MemberRole] = Reads.of[Int].map(valueOf)
-  implicit val writes: Writes[MemberRole] = (o: MemberRole) => JsNumber(intValueOf(o))
-}
 
 
