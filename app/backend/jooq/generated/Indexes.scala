@@ -5,16 +5,9 @@ package backend.jooq.generated
 
 
 import backend.jooq.generated.tables.AggregateVersions
-import backend.jooq.generated.tables.AmPendingUsers
-import backend.jooq.generated.tables.AmUserSystemRoles
-import backend.jooq.generated.tables.AmUsers
 import backend.jooq.generated.tables.EventsJournal
+import backend.jooq.generated.tables.MembershipMembers
 import backend.jooq.generated.tables.PlayEvolutions
-import backend.jooq.generated.tables.TrackerInvitations
-import backend.jooq.generated.tables.TrackerOrganizations
-import backend.jooq.generated.tables.TrackerParticipants
-import backend.jooq.generated.tables.TrackerProjects
-import backend.jooq.generated.tables.TrackerUsers
 
 import javax.annotation.Generated
 
@@ -42,43 +35,13 @@ object Indexes {
   // -------------------------------------------------------------------------
 
   val AGGREGATE_VERSIONS_PK = Indexes0.AGGREGATE_VERSIONS_PK
-  val AM_PENDING_USERS_EMAIL_IDX = Indexes0.AM_PENDING_USERS_EMAIL_IDX
-  val AM_PENDING_USERS_USERNAME_IDX = Indexes0.AM_PENDING_USERS_USERNAME_IDX
-  val PENDING_USERS_PKEY = Indexes0.PENDING_USERS_PKEY
-  val FKI_USER_SYSTEM_ROLES_USER_ID_FK = Indexes0.FKI_USER_SYSTEM_ROLES_USER_ID_FK
-  val USER_SYSTEM_ROLES_PKEY = Indexes0.USER_SYSTEM_ROLES_PKEY
-  val AM_USERS_EMAIL_IDX = Indexes0.AM_USERS_EMAIL_IDX
-  val AM_USERS_USERNAME_IDX = Indexes0.AM_USERS_USERNAME_IDX
-  val USERS_EMAIL_KEY = Indexes0.USERS_EMAIL_KEY
-  val USERS_PKEY = Indexes0.USERS_PKEY
-  val USERS_USERNAME_KEY = Indexes0.USERS_USERNAME_KEY
   val EVENTS_JOURNAL_AGGREGATE_ROOT_TYPE_IDX = Indexes0.EVENTS_JOURNAL_AGGREGATE_ROOT_TYPE_IDX
   val EVENTS_JOURNAL_EVENT_OFFSET_IDX = Indexes0.EVENTS_JOURNAL_EVENT_OFFSET_IDX
   val EVENTS_JOURNAL_PK = Indexes0.EVENTS_JOURNAL_PK
+  val MEMBERSHIP_MEMBERS_EMAIL_IDX = Indexes0.MEMBERSHIP_MEMBERS_EMAIL_IDX
+  val MEMBERSHIP_MEMBERS_NAME_IDX = Indexes0.MEMBERSHIP_MEMBERS_NAME_IDX
+  val PENDING_USERS_PKEY = Indexes0.PENDING_USERS_PKEY
   val PLAY_EVOLUTIONS_PKEY = Indexes0.PLAY_EVOLUTIONS_PKEY
-  val TRACKER_INVITATIONS_INVITED_BY_PARTICIPANT_ID_IDX = Indexes0.TRACKER_INVITATIONS_INVITED_BY_PARTICIPANT_ID_IDX
-  val TRACKER_INVITATIONS_INVITED_USER_ID_ORGANIZATION_ID_IDX = Indexes0.TRACKER_INVITATIONS_INVITED_USER_ID_ORGANIZATION_ID_IDX
-  val TRACKER_INVITATIONS_PKEY = Indexes0.TRACKER_INVITATIONS_PKEY
-  val TRACKER_ORGANIZATIONS_CODE_IDX = Indexes0.TRACKER_ORGANIZATIONS_CODE_IDX
-  val TRACKER_ORGANIZATIONS_CODE_KEY = Indexes0.TRACKER_ORGANIZATIONS_CODE_KEY
-  val TRACKER_ORGANIZATIONS_CREATED_BY_USER_ID_IDX = Indexes0.TRACKER_ORGANIZATIONS_CREATED_BY_USER_ID_IDX
-  val TRACKER_ORGANIZATIONS_NAME_IDX = Indexes0.TRACKER_ORGANIZATIONS_NAME_IDX
-  val TRACKER_ORGANIZATIONS_NAME_KEY = Indexes0.TRACKER_ORGANIZATIONS_NAME_KEY
-  val TRACKER_ORGANIZATIONS_PKEY = Indexes0.TRACKER_ORGANIZATIONS_PKEY
-  val TRACKER_ORGANIZATIONS_VISIBILITY_IDX = Indexes0.TRACKER_ORGANIZATIONS_VISIBILITY_IDX
-  val TRACKER_PARTICIPANTS_ORGANIZATION_ID_IDX = Indexes0.TRACKER_PARTICIPANTS_ORGANIZATION_ID_IDX
-  val TRACKER_PARTICIPANTS_PKEY = Indexes0.TRACKER_PARTICIPANTS_PKEY
-  val TRACKER_PARTICIPANTS_USER_ID_IDX = Indexes0.TRACKER_PARTICIPANTS_USER_ID_IDX
-  val TRACKER_PARTICIPANTS_USER_ID_ORGANIZATION_ID_KEY = Indexes0.TRACKER_PARTICIPANTS_USER_ID_ORGANIZATION_ID_KEY
-  val TRACKER_PROJECTS_CREATED_BY_PARTICIPANT_ID_IDX = Indexes0.TRACKER_PROJECTS_CREATED_BY_PARTICIPANT_ID_IDX
-  val TRACKER_PROJECTS_ORGANIZATION_ID_CODE_KEY = Indexes0.TRACKER_PROJECTS_ORGANIZATION_ID_CODE_KEY
-  val TRACKER_PROJECTS_ORGANIZATION_ID_NAME_KEY = Indexes0.TRACKER_PROJECTS_ORGANIZATION_ID_NAME_KEY
-  val TRACKER_PROJECTS_PKEY = Indexes0.TRACKER_PROJECTS_PKEY
-  val TRACKER_USERS_EMAIL_IDX = Indexes0.TRACKER_USERS_EMAIL_IDX
-  val TRACKER_USERS_EMAIL_KEY = Indexes0.TRACKER_USERS_EMAIL_KEY
-  val TRACKER_USERS_PKEY = Indexes0.TRACKER_USERS_PKEY
-  val TRACKER_USERS_USERNAME_IDX = Indexes0.TRACKER_USERS_USERNAME_IDX
-  val TRACKER_USERS_USERNAME_KEY = Indexes0.TRACKER_USERS_USERNAME_KEY
 
   // -------------------------------------------------------------------------
   // [#1459] distribute members to avoid static initialisers > 64kb
@@ -86,42 +49,12 @@ object Indexes {
 
   private object Indexes0 {
     val AGGREGATE_VERSIONS_PK : Index = Internal.createIndex("aggregate_versions_pk", AggregateVersions.AGGREGATE_VERSIONS, Array[OrderField [_] ](AggregateVersions.AGGREGATE_VERSIONS.AGGREGATE_ROOT_TYPE, AggregateVersions.AGGREGATE_VERSIONS.AGGREGATE_ROOT_ID), true)
-    val AM_PENDING_USERS_EMAIL_IDX : Index = Internal.createIndex("am_pending_users_email_idx", AmPendingUsers.AM_PENDING_USERS, Array[OrderField [_] ](AmPendingUsers.AM_PENDING_USERS.EMAIL), false)
-    val AM_PENDING_USERS_USERNAME_IDX : Index = Internal.createIndex("am_pending_users_username_idx", AmPendingUsers.AM_PENDING_USERS, Array[OrderField [_] ](AmPendingUsers.AM_PENDING_USERS.USERNAME), false)
-    val PENDING_USERS_PKEY : Index = Internal.createIndex("pending_users_pkey", AmPendingUsers.AM_PENDING_USERS, Array[OrderField [_] ](AmPendingUsers.AM_PENDING_USERS.ID), true)
-    val FKI_USER_SYSTEM_ROLES_USER_ID_FK : Index = Internal.createIndex("fki_user_system_roles_user_id_fk", AmUserSystemRoles.AM_USER_SYSTEM_ROLES, Array[OrderField [_] ](AmUserSystemRoles.AM_USER_SYSTEM_ROLES.USER_ID), false)
-    val USER_SYSTEM_ROLES_PKEY : Index = Internal.createIndex("user_system_roles_pkey", AmUserSystemRoles.AM_USER_SYSTEM_ROLES, Array[OrderField [_] ](AmUserSystemRoles.AM_USER_SYSTEM_ROLES.USER_ID, AmUserSystemRoles.AM_USER_SYSTEM_ROLES.ROLE), true)
-    val AM_USERS_EMAIL_IDX : Index = Internal.createIndex("am_users_email_idx", AmUsers.AM_USERS, Array[OrderField [_] ](AmUsers.AM_USERS.EMAIL), false)
-    val AM_USERS_USERNAME_IDX : Index = Internal.createIndex("am_users_username_idx", AmUsers.AM_USERS, Array[OrderField [_] ](AmUsers.AM_USERS.USERNAME), false)
-    val USERS_EMAIL_KEY : Index = Internal.createIndex("users_email_key", AmUsers.AM_USERS, Array[OrderField [_] ](AmUsers.AM_USERS.EMAIL), true)
-    val USERS_PKEY : Index = Internal.createIndex("users_pkey", AmUsers.AM_USERS, Array[OrderField [_] ](AmUsers.AM_USERS.ID), true)
-    val USERS_USERNAME_KEY : Index = Internal.createIndex("users_username_key", AmUsers.AM_USERS, Array[OrderField [_] ](AmUsers.AM_USERS.USERNAME), true)
     val EVENTS_JOURNAL_AGGREGATE_ROOT_TYPE_IDX : Index = Internal.createIndex("events_journal_aggregate_root_type_idx", EventsJournal.EVENTS_JOURNAL, Array[OrderField [_] ](EventsJournal.EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE, EventsJournal.EVENTS_JOURNAL.AGGREGATE_ROOT_ID), false)
     val EVENTS_JOURNAL_EVENT_OFFSET_IDX : Index = Internal.createIndex("events_journal_event_offset_idx", EventsJournal.EVENTS_JOURNAL, Array[OrderField [_] ](EventsJournal.EVENTS_JOURNAL.EVENT_OFFSET, EventsJournal.EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE), false)
     val EVENTS_JOURNAL_PK : Index = Internal.createIndex("events_journal_pk", EventsJournal.EVENTS_JOURNAL, Array[OrderField [_] ](EventsJournal.EVENTS_JOURNAL.EVENT_OFFSET), true)
+    val MEMBERSHIP_MEMBERS_EMAIL_IDX : Index = Internal.createIndex("membership_members_email_idx", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.EMAIL), false)
+    val MEMBERSHIP_MEMBERS_NAME_IDX : Index = Internal.createIndex("membership_members_name_idx", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.NAME), false)
+    val PENDING_USERS_PKEY : Index = Internal.createIndex("pending_users_pkey", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.ID), true)
     val PLAY_EVOLUTIONS_PKEY : Index = Internal.createIndex("play_evolutions_pkey", PlayEvolutions.PLAY_EVOLUTIONS, Array[OrderField [_] ](PlayEvolutions.PLAY_EVOLUTIONS.ID), true)
-    val TRACKER_INVITATIONS_INVITED_BY_PARTICIPANT_ID_IDX : Index = Internal.createIndex("tracker_invitations_invited_by_participant_id_idx", TrackerInvitations.TRACKER_INVITATIONS, Array[OrderField [_] ](TrackerInvitations.TRACKER_INVITATIONS.INVITED_BY_PARTICIPANT_ID), false)
-    val TRACKER_INVITATIONS_INVITED_USER_ID_ORGANIZATION_ID_IDX : Index = Internal.createIndex("tracker_invitations_invited_user_id_organization_id_idx", TrackerInvitations.TRACKER_INVITATIONS, Array[OrderField [_] ](TrackerInvitations.TRACKER_INVITATIONS.INVITED_USER_ID, TrackerInvitations.TRACKER_INVITATIONS.ORGANIZATION_ID), false)
-    val TRACKER_INVITATIONS_PKEY : Index = Internal.createIndex("tracker_invitations_pkey", TrackerInvitations.TRACKER_INVITATIONS, Array[OrderField [_] ](TrackerInvitations.TRACKER_INVITATIONS.ID), true)
-    val TRACKER_ORGANIZATIONS_CODE_IDX : Index = Internal.createIndex("tracker_organizations_code_idx", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.CODE), false)
-    val TRACKER_ORGANIZATIONS_CODE_KEY : Index = Internal.createIndex("tracker_organizations_code_key", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.CODE), true)
-    val TRACKER_ORGANIZATIONS_CREATED_BY_USER_ID_IDX : Index = Internal.createIndex("tracker_organizations_created_by_user_id_idx", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.CREATED_BY_USER_ID), false)
-    val TRACKER_ORGANIZATIONS_NAME_IDX : Index = Internal.createIndex("tracker_organizations_name_idx", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.NAME), false)
-    val TRACKER_ORGANIZATIONS_NAME_KEY : Index = Internal.createIndex("tracker_organizations_name_key", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.NAME), true)
-    val TRACKER_ORGANIZATIONS_PKEY : Index = Internal.createIndex("tracker_organizations_pkey", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.ID), true)
-    val TRACKER_ORGANIZATIONS_VISIBILITY_IDX : Index = Internal.createIndex("tracker_organizations_visibility_idx", TrackerOrganizations.TRACKER_ORGANIZATIONS, Array[OrderField [_] ](TrackerOrganizations.TRACKER_ORGANIZATIONS.VISIBILITY), false)
-    val TRACKER_PARTICIPANTS_ORGANIZATION_ID_IDX : Index = Internal.createIndex("tracker_participants_organization_id_idx", TrackerParticipants.TRACKER_PARTICIPANTS, Array[OrderField [_] ](TrackerParticipants.TRACKER_PARTICIPANTS.ORGANIZATION_ID), false)
-    val TRACKER_PARTICIPANTS_PKEY : Index = Internal.createIndex("tracker_participants_pkey", TrackerParticipants.TRACKER_PARTICIPANTS, Array[OrderField [_] ](TrackerParticipants.TRACKER_PARTICIPANTS.ID), true)
-    val TRACKER_PARTICIPANTS_USER_ID_IDX : Index = Internal.createIndex("tracker_participants_user_id_idx", TrackerParticipants.TRACKER_PARTICIPANTS, Array[OrderField [_] ](TrackerParticipants.TRACKER_PARTICIPANTS.USER_ID), false)
-    val TRACKER_PARTICIPANTS_USER_ID_ORGANIZATION_ID_KEY : Index = Internal.createIndex("tracker_participants_user_id_organization_id_key", TrackerParticipants.TRACKER_PARTICIPANTS, Array[OrderField [_] ](TrackerParticipants.TRACKER_PARTICIPANTS.USER_ID, TrackerParticipants.TRACKER_PARTICIPANTS.ORGANIZATION_ID), true)
-    val TRACKER_PROJECTS_CREATED_BY_PARTICIPANT_ID_IDX : Index = Internal.createIndex("tracker_projects_created_by_participant_id_idx", TrackerProjects.TRACKER_PROJECTS, Array[OrderField [_] ](TrackerProjects.TRACKER_PROJECTS.CREATED_BY_PARTICIPANT_ID), false)
-    val TRACKER_PROJECTS_ORGANIZATION_ID_CODE_KEY : Index = Internal.createIndex("tracker_projects_organization_id_code_key", TrackerProjects.TRACKER_PROJECTS, Array[OrderField [_] ](TrackerProjects.TRACKER_PROJECTS.ORGANIZATION_ID, TrackerProjects.TRACKER_PROJECTS.CODE), true)
-    val TRACKER_PROJECTS_ORGANIZATION_ID_NAME_KEY : Index = Internal.createIndex("tracker_projects_organization_id_name_key", TrackerProjects.TRACKER_PROJECTS, Array[OrderField [_] ](TrackerProjects.TRACKER_PROJECTS.ORGANIZATION_ID, TrackerProjects.TRACKER_PROJECTS.NAME), true)
-    val TRACKER_PROJECTS_PKEY : Index = Internal.createIndex("tracker_projects_pkey", TrackerProjects.TRACKER_PROJECTS, Array[OrderField [_] ](TrackerProjects.TRACKER_PROJECTS.ID), true)
-    val TRACKER_USERS_EMAIL_IDX : Index = Internal.createIndex("tracker_users_email_idx", TrackerUsers.TRACKER_USERS, Array[OrderField [_] ](TrackerUsers.TRACKER_USERS.EMAIL), false)
-    val TRACKER_USERS_EMAIL_KEY : Index = Internal.createIndex("tracker_users_email_key", TrackerUsers.TRACKER_USERS, Array[OrderField [_] ](TrackerUsers.TRACKER_USERS.EMAIL), true)
-    val TRACKER_USERS_PKEY : Index = Internal.createIndex("tracker_users_pkey", TrackerUsers.TRACKER_USERS, Array[OrderField [_] ](TrackerUsers.TRACKER_USERS.ID), true)
-    val TRACKER_USERS_USERNAME_IDX : Index = Internal.createIndex("tracker_users_username_idx", TrackerUsers.TRACKER_USERS, Array[OrderField [_] ](TrackerUsers.TRACKER_USERS.USERNAME), false)
-    val TRACKER_USERS_USERNAME_KEY : Index = Internal.createIndex("tracker_users_username_key", TrackerUsers.TRACKER_USERS, Array[OrderField [_] ](TrackerUsers.TRACKER_USERS.USERNAME), true)
   }
 }

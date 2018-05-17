@@ -5,16 +5,9 @@ package backend.jooq.generated
 
 
 import backend.jooq.generated.tables.AggregateVersions
-import backend.jooq.generated.tables.AmPendingUsers
-import backend.jooq.generated.tables.AmUserSystemRoles
-import backend.jooq.generated.tables.AmUsers
 import backend.jooq.generated.tables.EventsJournal
+import backend.jooq.generated.tables.MembershipMembers
 import backend.jooq.generated.tables.PlayEvolutions
-import backend.jooq.generated.tables.TrackerInvitations
-import backend.jooq.generated.tables.TrackerOrganizations
-import backend.jooq.generated.tables.TrackerParticipants
-import backend.jooq.generated.tables.TrackerProjects
-import backend.jooq.generated.tables.TrackerUsers
 
 import java.util.ArrayList
 import java.util.Arrays
@@ -60,20 +53,8 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
 
   private def getSequences0(): List[Sequence[_]] = {
     return Arrays.asList[Sequence[_]](
-      Sequences.AM_PENDING_USERS_SEQ,
-      Sequences.AM_USERS_SEQ,
       Sequences.EVENTS_JOURNAL_EVENT_OFFSET_SEQ,
-      Sequences.INVITATIONS_SEQ,
-      Sequences.ORGANIZATIONS_SEQ,
-      Sequences.PARTICIPANTS_SEQ,
-      Sequences.PENDING_USERS_SEQ,
-      Sequences.PROJECTS_SEQ,
-      Sequences.TRACKER_INVITATIONS_SEQ,
-      Sequences.TRACKER_ORGANIZATIONS_SEQ,
-      Sequences.TRACKER_PARTICIPANTS_SEQ,
-      Sequences.TRACKER_PROJECTS_SEQ,
-      Sequences.TRACKER_USERS_SEQ,
-      Sequences.USERS_SEQ)
+      Sequences.MEMBERSHIP_MEMBERS_SEQ)
   }
 
   override def getTables : List[Table[_]] = {
@@ -85,15 +66,8 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
   private def getTables0(): List[Table[_]] = {
     return Arrays.asList[Table[_]](
       AggregateVersions.AGGREGATE_VERSIONS,
-      AmPendingUsers.AM_PENDING_USERS,
-      AmUserSystemRoles.AM_USER_SYSTEM_ROLES,
-      AmUsers.AM_USERS,
       EventsJournal.EVENTS_JOURNAL,
-      PlayEvolutions.PLAY_EVOLUTIONS,
-      TrackerInvitations.TRACKER_INVITATIONS,
-      TrackerOrganizations.TRACKER_ORGANIZATIONS,
-      TrackerParticipants.TRACKER_PARTICIPANTS,
-      TrackerProjects.TRACKER_PROJECTS,
-      TrackerUsers.TRACKER_USERS)
+      MembershipMembers.MEMBERSHIP_MEMBERS,
+      PlayEvolutions.PLAY_EVOLUTIONS)
   }
 }

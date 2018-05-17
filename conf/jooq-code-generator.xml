@@ -4,7 +4,7 @@
         <driver>org.postgresql.Driver</driver>
         <url>jdbc:postgresql://localhost/postgres</url>
         <user>postgres</user>
-        <password>postgres</password>
+        <password>example</password>
     </jdbc>
     <generator>
         <name>org.jooq.util.ScalaGenerator</name>
