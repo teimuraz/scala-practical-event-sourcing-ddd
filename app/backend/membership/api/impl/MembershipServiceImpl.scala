@@ -1,6 +1,7 @@
 package backend.membership.api.impl
 
 import backend.auth.AuthContext
+import backend.common.Email
 import backend.membership.api.{CreateNewMemberReq, MemberDto, MembershipService}
 import backend.membership.domain.{Member, MemberId, MemberName, MemberRepository}
 import javax.inject.{Inject, Singleton}
@@ -19,18 +20,18 @@ class MembershipServiceImpl @Inject()
   extends MembershipService {
 
   override def createNewMember(req: CreateNewMemberReq)(implicit context: AuthContext): Future[MemberDto] = {
-    val memberWithSameEmailFuture = membershipQueryService.findByEmail(req.email.value)
+    val memberWithSameEmailFuture = membershipQueryService.findByEmail(req.email)
     val membershipWithSameNameFuture = membershipQueryService.findByName(req.name)
     val creatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
 
     for {
       _ <- memberWithSameEmailFuture
         .map { memberOpt =>
-          memberOpt.foreach(throw new ValidationException(s"Email ${req.email.value} is already taken"))
+          memberOpt.foreach(_ => throw new ValidationException(s"Email ${req.email} is already taken"))
         }
       _ <- membershipWithSameNameFuture
         .map { memberOpt =>
-          memberOpt.foreach(throw new ValidationException(s"Name ${req.name} is already taken"))
+          memberOpt.foreach(_ => throw new ValidationException(s"Name ${req.name} is already taken"))
         }
       creator <- creatorFuture.map {
         case Some(member) => member
@@ -38,7 +39,7 @@ class MembershipServiceImpl @Inject()
       }
       newMemberId <- memberRepository.nextId
       memberDto <- {
-        creator.createNewMember(newMemberId, MemberName(req.name), req.email) match {
+        creator.createNewMember(newMemberId, MemberName(req.name), Email(req.email)) match {
           case Success(newMember) =>
             transactionManager.execute { implicit rc =>
               memberRepository.save(newMember)
@@ -52,6 +53,9 @@ class MembershipServiceImpl @Inject()
       memberDto
     }
   }
+
+
+  override def getMembers: Future[Seq[MemberDto]] = membershipQueryService.findAllMembers
 
   private def memberDomainToDto(member: Member): MemberDto = {
     MemberDto(member.id.value, member.name.value, member.email.value, member.role, member.becameMemberAt)

@@ -1,0 +1,20 @@
+@import backend.membership.api.CreateNewMemberReq
+@import helper._
+@(createNewMemberForm: Form[CreateNewMemberReq])(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
+
+@main("Practical Event Sourcing and Domain Driven Design", assetsFinder) {
+
+    <div class="card">
+        <div class="card-body">
+        <h3 class="card-title">Create new member</h3>
+        @helper.form(action = routes.MembershipController.doCreateNewMember()) {
+            @CSRF.formField
+            @helper.inputText(createNewMemberForm("name"))
+            @helper.inputText(createNewMemberForm("email"))
+            <button type="submit" class="btn btn-success">Create</button>
+        }
+        </div>
+    </div>
+
+
+}

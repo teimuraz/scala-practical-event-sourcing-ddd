@@ -1,9 +1,9 @@
 import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
 import backend.membership.domain.MemberRepository
-import backend.membership.infrastructure.{EventSourcedMemberRepository, MembersProjectionBuilder}
+import backend.membership.infrastructure.{EventSourcedMemberRepository, MembersProjectionBuilder, Seeder}
 import com.google.inject.{AbstractModule, TypeLiteral}
-import library.jooq.Db
+import library.jooq.{Db, TransactionManager}
 import library.security.{BCryptPasswordEncoder, PasswordEncoder}
 import play.api.libs.concurrent.AkkaGuiceSupport
 
@@ -28,6 +28,8 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
     bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
+    bind(classOf[TransactionManager])
+    bind(classOf[Seeder]).asEagerSingleton()
 
 
   }

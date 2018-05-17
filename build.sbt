@@ -23,7 +23,7 @@ libraryDependencies += "net.debasishg" %% "redisclient" % "3.4"
 libraryDependencies += "com.typesafe.akka" %% "akka-persistence" % "2.5.8"
 
 
-libraryDependencies += "org.webjars" % "bootstrap" % "4.0.0"
+libraryDependencies += "org.webjars" % "bootstrap" % "4.1.0"
 libraryDependencies += "org.webjars" % "jquery" % "3.2.1"
 
 // val elastic4sVersion = "5.6.0"

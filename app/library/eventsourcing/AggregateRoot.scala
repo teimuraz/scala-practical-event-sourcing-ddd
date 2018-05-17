@@ -21,8 +21,6 @@ trait AggregateRoot[E <: AggregateRoot[E, ID, Event], ID, Event <: DomainEvent] 
 
   def aggregateRootInfo: AggregateRootInfo[Event]
 
-
-
   def copyWithInfo(info: AggregateRootInfo[Event]): E
 
   protected def applyChange(event: Event, isNew: Boolean = true): E = {
