@@ -25,7 +25,6 @@ libraryDependencies += "com.typesafe.akka" %% "akka-persistence" % "2.5.8"
 
 libraryDependencies += "org.webjars" % "bootstrap" % "4.0.0"
 libraryDependencies += "org.webjars" % "jquery" % "3.2.1"
-libraryDependencies += "org.webjars" % "popper" % "1.12.3"
 
 // val elastic4sVersion = "5.6.0"
 

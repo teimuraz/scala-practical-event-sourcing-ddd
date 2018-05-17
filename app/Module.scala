@@ -1,6 +1,7 @@
 import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
-import backend.membership.infrastructure.MembersProjectionBuilder
+import backend.membership.domain.MemberRepository
+import backend.membership.infrastructure.{EventSourcedMemberRepository, MembersProjectionBuilder}
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.Db
 import library.security.{BCryptPasswordEncoder, PasswordEncoder}
@@ -26,6 +27,7 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[MembershipService]).to(classOf[MembershipServiceImpl])
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
+    bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
 
 
   }

@@ -6,3 +6,5 @@ target
 /.project
 /.settings
 /RUNNING_PID
+/docker/data/postgres
+!/docker/data/postgres/empty
