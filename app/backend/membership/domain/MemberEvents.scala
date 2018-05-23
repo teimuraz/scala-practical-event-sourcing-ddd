@@ -6,10 +6,10 @@ import org.joda.time.DateTime
 import play.api.libs.json._
 import library.joda.json.jsonDateTimeFormat
 
-trait MemberEvent extends DomainEvent
+trait MemberDomainEvent extends DomainEvent
 
-object MemberEvent {
-  implicit val reads: Reads[MemberEvent] = {
+object MemberDomainEvent {
+  implicit val reads: Reads[MemberDomainEvent] = {
     (__ \ "eventType").read[String].flatMap {
       case MemberCreated.eventType => implicitly[Reads[MemberCreated]].map(identity)
       case MemberNameChanged.eventType => implicitly[Reads[MemberNameChanged]].map(identity)
@@ -17,7 +17,7 @@ object MemberEvent {
       case other => Reads(_ => JsError(s"Unknown event type $other"))
     }
   }
-  implicit val writes: Writes[MemberEvent] = Writes { event =>
+  implicit val writes: Writes[MemberDomainEvent] = Writes { event =>
     val (jsValue, eventType) = event match {
       case m: MemberCreated => (Json.toJson(m)(MemberCreated.format), MemberCreated.eventType)
       case m: MemberNameChanged => (Json.toJson(m)(MemberNameChanged.format), MemberNameChanged.eventType)
@@ -33,7 +33,7 @@ case class MemberCreated(
     email: Email,
     role: MemberRole,
     becameMemberAt: DateTime
-) extends MemberEvent {
+) extends MemberDomainEvent {
   override def eventType: String = MemberCreated.eventType
 }
 
@@ -42,7 +42,7 @@ object MemberCreated {
   implicit val format: OFormat[MemberCreated] = Json.format[MemberCreated]
 }
 
-case class MemberNameChanged(id: MemberId, name: MemberName) extends MemberEvent {
+case class MemberNameChanged(id: MemberId, name: MemberName) extends MemberDomainEvent {
   override def eventType: String = MemberNameChanged.eventType
 }
 
@@ -51,7 +51,7 @@ object MemberNameChanged {
   implicit val format: OFormat[MemberNameChanged] = Json.format[MemberNameChanged]
 }
 
-case class MemberEmailChanged(id: MemberId, email: Email) extends MemberEvent {
+case class MemberEmailChanged(id: MemberId, email: Email) extends MemberDomainEvent {
   override def eventType: String = MemberEmailChanged.eventType
 }
 

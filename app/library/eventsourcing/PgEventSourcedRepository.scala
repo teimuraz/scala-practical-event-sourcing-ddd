@@ -21,7 +21,7 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
   def emptyState: E
   def db: Db
   def topic: Option[Topic[Event, RepComponents]] = None
-
+  def idAsLong(id: ID): Long
 
   implicit def writes: Writes[Event]
   implicit def reads: Reads[Event]
@@ -33,7 +33,11 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
     db.query { dsl =>
       val eventRecords = dsl
         .selectFrom(EVENTS_JOURNAL)
-        .where(EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE.eq(aggregateRootType.value))
+        .where(
+          EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE.eq(aggregateRootType.value)
+            // let's assume that all ids
+          .and(EVENTS_JOURNAL.AGGREGATE_ROOT_ID.eq(idAsLong(id)))
+        )
         .orderBy(EVENTS_JOURNAL.EVENT_OFFSET)
         .fetchInto(classOf[EventsJournalRecord])
         .asScala

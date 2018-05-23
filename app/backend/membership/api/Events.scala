@@ -14,5 +14,6 @@ case class MemberCreated(
 ) extends MemberEvent
 
 case class MemberNameChanged(id: Long, name: String) extends MemberEvent
+
 case class MemberEmailChanged(id: Long, email: String) extends MemberEvent
 

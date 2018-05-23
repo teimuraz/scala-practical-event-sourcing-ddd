@@ -3,11 +3,12 @@ package controllers
 import backend.auth.AuthContext
 import backend.membership.api.{CreateNewMemberReq, MembershipService}
 import javax.inject.{Inject, Singleton}
-import library.error.UserException
+import library.error.{UserException, ValidationException}
 import play.api.data.Form
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.data.validation.Constraints.nonEmpty
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -18,7 +19,7 @@ class MembershipController @Inject()
   extends AbstractController(cc) {
 
   // Hardcode logged in member
-  implicit val authContext: AuthContext = AuthContext(100)
+  implicit val authContext: AuthContext = AuthContext(1)
 
   def index: Action[AnyContent] = Action.async {
     membershipService.getMembers.map { members =>
@@ -29,7 +30,7 @@ class MembershipController @Inject()
   val createNewMemberForm = Form(
     mapping(
       "name" -> nonEmptyText,
-      "email" -> email
+      "email" -> email.verifying(nonEmpty),
     )(CreateNewMemberReq.apply)(CreateNewMemberReq.unapply)
   )
 
@@ -49,7 +50,11 @@ class MembershipController @Inject()
       createNewMemberReq => {
         membershipService.createNewMember(createNewMemberReq).map( member =>
           Redirect(routes.MembershipController.index())
-        )
+        ).recover {
+          case e: UserException =>
+            val form = createNewMemberForm.fill(createNewMemberReq).withGlobalError(e.getMessage)
+            BadRequest(views.html.membership.createNewMember(form))
+        }
       }
     )
   }

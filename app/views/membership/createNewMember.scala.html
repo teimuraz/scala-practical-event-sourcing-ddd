@@ -1,5 +1,7 @@
 @import backend.membership.api.CreateNewMemberReq
 @import helper._
+@import custom_forms._
+@import views.custom_forms.Helpers._
 @(createNewMemberForm: Form[CreateNewMemberReq])(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
 
 @main("Practical Event Sourcing and Domain Driven Design", assetsFinder) {
@@ -9,8 +11,14 @@
         <h3 class="card-title">Create new member</h3>
         @helper.form(action = routes.MembershipController.doCreateNewMember()) {
             @CSRF.formField
-            @helper.inputText(createNewMemberForm("name"))
-            @helper.inputText(createNewMemberForm("email"))
+            @inputText(createNewMemberForm("name"), '_label -> Messages("Name"), 'class -> "form-control")
+            @inputText(createNewMemberForm("email"), '_label -> Messages("Email"), 'class -> "form-control")
+            @if(createNewMemberForm.hasGlobalErrors) {
+                <div class="alert alert-danger" role="alert">
+                    @createNewMemberForm.globalError.map(_.format).mkString("<br />")
+                </div>
+            }
+
             <button type="submit" class="btn btn-success">Create</button>
         }
         </div>

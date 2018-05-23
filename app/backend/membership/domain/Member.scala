@@ -15,8 +15,8 @@ case class Member private(
     email: Email,
     role: MemberRole,
     becameMemberAt: DateTime,
-    aggregateRootInfo: AggregateRootInfo[MemberEvent]
-) extends AggregateRoot[Member, MemberId, MemberEvent] {
+    aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
+) extends AggregateRoot[Member, MemberId, MemberDomainEvent] {
 
   def changeName(newName: MemberName): Member = {
     applyChange(MemberNameChanged(id, newName))
@@ -36,12 +36,11 @@ case class Member private(
   def createNewMember(id: MemberId, name: MemberName, email: Email): Try[Member] = Try({
     role match {
       case Owner => Member.create(id, name, email, StandardMember, DateTime.now())
-      case _ => throw new ForbiddenException("Only owner cane create new members")
+      case _ => throw new ForbiddenException("Only owner can create new members")
     }
   })
 
-
-  override def applyEvent(event: MemberEvent): Member = {
+  override def applyEvent(event: MemberDomainEvent): Member = {
     event match {
       case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.becameMemberAt, aggregateRootInfo)
       case e: MemberNameChanged => copy(name = e.name)
@@ -49,7 +48,7 @@ case class Member private(
     }
   }
 
-  override def copyWithInfo(info: AggregateRootInfo[MemberEvent]): Member = copy(aggregateRootInfo = info)
+  override def copyWithInfo(info: AggregateRootInfo[MemberDomainEvent]): Member = copy(aggregateRootInfo = info)
   override def idAsLong: Long = id.value
 }
 
@@ -59,7 +58,7 @@ object Member {
     Member(id, name, email, role, becameMemberAt, AggregateRootInfo(events, 0))
   }
 
-  val empty: Member = Member(MemberId(0), MemberName(""), Email("some@mail.com"), StandardMember, DateTime.now, AggregateRootInfo(Nil, -1))
+  val empty: Member = Member(MemberId(0), MemberName("", validate = false), Email("", validate = false), StandardMember, DateTime.now, AggregateRootInfo(Nil, 0))
 }
 
 /// Types
@@ -79,6 +78,5 @@ object MemberName extends StringValidatable[MemberName] {
   implicit val reads: Reads[MemberName] = Reads.of[String].map(MemberName(_))
   implicit val writes: Writes[MemberName] = (o: MemberName) => JsString(o.value)
 }
-
 
 

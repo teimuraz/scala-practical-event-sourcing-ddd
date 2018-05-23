@@ -1,22 +1,22 @@
 package backend.membership.infrastructure
 
 import backend.common.MemberRole
-import backend.membership.api._
 import javax.inject.{Inject, Singleton}
 import library.jooq.{Db, JooqRepositorySupport}
 import library.messaging.{Subscriber, Topic}
 import library.repository.RepComponents
 import backend.jooq.generated.Tables.MEMBERSHIP_MEMBERS
+import backend.membership.domain._
 
 @Singleton
 class MembersProjectionBuilder @Inject()
-    (memberTopic: MemberTopic)
-  extends Subscriber[MemberEvent, RepComponents]
+    (memberTopic: MemberDomainEventTopic)
+  extends Subscriber[MemberDomainEvent, RepComponents]
   with JooqRepositorySupport {
 
-  override def topic: Topic[MemberEvent, RepComponents] = memberTopic
+  override def topic: Topic[MemberDomainEvent, RepComponents] = memberTopic
 
-  override def handle(message: MemberEvent)(implicit additionalData: RepComponents): Unit = {
+  override def handle(message: MemberDomainEvent)(implicit additionalData: RepComponents): Unit = {
     message match {
       case e: MemberCreated => handle(e)
       case e: MemberNameChanged => handle(e)
@@ -35,9 +35,9 @@ class MembersProjectionBuilder @Inject()
         MEMBERSHIP_MEMBERS.BECAME_MEMBER_AT
       )
       .values(
-        e.id,
-        e.name,
-        e.email,
+        e.id.value,
+        e.name.value,
+        e.email.value,
         MemberRole.intValueOf(e.role),
         e.becameMemberAt
       )
@@ -47,17 +47,16 @@ class MembersProjectionBuilder @Inject()
   private def handle(e: MemberNameChanged)(implicit rc: RepComponents) = {
     rc.dsl
       .update(MEMBERSHIP_MEMBERS)
-      .set(MEMBERSHIP_MEMBERS.NAME, e.name)
-      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id))
+      .set(MEMBERSHIP_MEMBERS.NAME, e.name.value)
+      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id.value))
       .execute()
   }
 
   private def handle(e: MemberEmailChanged)(implicit rc: RepComponents) = {
     rc.dsl
       .update(MEMBERSHIP_MEMBERS)
-      .set(MEMBERSHIP_MEMBERS.EMAIL, e.email)
-      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id))
+      .set(MEMBERSHIP_MEMBERS.EMAIL, e.email.value)
+      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id.value))
       .execute()
   }
-
 }
