@@ -13,6 +13,18 @@ import scala.concurrent.Future
 
 @Singleton
 class MembershipQueryService @Inject()(db: Db) {
+
+  def findById(id: Long): Future[Option[MemberDto]] = {
+    db.query { dsl =>
+      val record = dsl
+        .selectFrom(MEMBERSHIP_MEMBERS)
+        .where(MEMBERSHIP_MEMBERS.ID.eq(id))
+        .fetchOneInto(classOf[MembershipMembersRecord])
+
+      recordOptToDto(record)
+    }
+  }
+
   def findByEmail(email: String): Future[Option[MemberDto]] = {
     db.query { dsl =>
       val record = dsl

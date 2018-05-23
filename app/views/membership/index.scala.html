@@ -21,7 +21,7 @@
             @members.map { member =>
               <tr>
                   <td>@member.id</td>
-                  <td>@member.name</td>
+                  <td><a href="@routes.MembershipController.view(member.id)">@member.name</a></td>
                   <td>@member.email</td>
                   <td>@member.role</td>
                   <td>@member.becameMemberAt</td>
@@ -29,5 +29,4 @@
             }
         </tbody>
     </table>
-
 }

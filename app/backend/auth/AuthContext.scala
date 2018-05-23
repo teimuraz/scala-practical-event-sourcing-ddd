@@ -1,3 +1,5 @@
 package backend.auth
 
-case class AuthContext(currentMemberId: Long)
+import backend.common.MemberRole
+
+case class AuthContext(currentMemberId: Long, currentMemberRole: MemberRole)

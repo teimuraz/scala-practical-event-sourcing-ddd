@@ -1,10 +1,9 @@
-@import backend.membership.api.CreateNewMemberReq
 @import helper._
-@import custom_forms._
-@import views.custom_forms.Helpers._
-@(createNewMemberForm: Form[CreateNewMemberReq])(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
+@import backend.membership.api.ChangeMemberEmailReq
+@import backend.membership.api.MemberDto
+@(form: Form[ChangeMemberEmailReq], member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
 
-@main("Practical Event Sourcing and Domain Driven Design", assetsFinder) {
+@main("Change member email", assetsFinder) {
 
     <div class="card">
         <div class="card-body">

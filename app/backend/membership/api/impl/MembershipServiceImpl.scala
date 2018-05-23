@@ -2,10 +2,10 @@ package backend.membership.api.impl
 
 import backend.auth.AuthContext
 import backend.common.Email
-import backend.membership.api.{CreateNewMemberReq, MemberDto, MembershipService}
+import backend.membership.api._
 import backend.membership.domain.{Member, MemberId, MemberName, MemberRepository}
 import javax.inject.{Inject, Singleton}
-import library.error.ValidationException
+import library.error.{NotFoundException, ValidationException}
 import library.jooq.TransactionManager
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,10 +54,70 @@ class MembershipServiceImpl @Inject()
     }
   }
 
+  override def changeMemberName(req: ChangeMemberNameReq): Future[MemberDto] = {
+    val memberWithSameNameFuture = membershipQueryService.findByName(req.name)
+    val memberFuture = memberRepository.findById(MemberId(req.id))
+    for {
+      _ <- memberWithSameNameFuture.map { memberOpt =>
+          memberOpt.foreach { member =>
+            if (member.id != req.id) {
+              throw new ValidationException(s"Name ${req.name} is already taken")
+            }
+          }
+        }
+      member <- memberFuture.map {
+        case Some(m) => m
+        case None => throw new ValidationException(s"Cannot change name of non-existing member (member id ${req.id})")
+      }
+      memberDto <- {
+        val withChangedName = member.changeName(MemberName(req.name))
+        transactionManager.execute { implicit rc =>
+          memberRepository.save(withChangedName)
+        }.map(memberDomainToDto)
+      }
+    } yield {
+      memberDto
+    }
+  }
+
+  override def changeMemberEmail(req: ChangeMemberEmailReq): Future[MemberDto] = {
+    val memberWithSameEmailFuture = membershipQueryService.findByName(req.email)
+    val memberFuture = memberRepository.findById(MemberId(req.id))
+    for {
+      _ <- memberWithSameEmailFuture.map { memberOpt =>
+        memberOpt.foreach { member =>
+          if (member.id != req.id) {
+            throw new ValidationException(s"Email ${req.email} is already taken")
+          }
+        }
+      }
+      member <- memberFuture.map {
+        case Some(m) => m
+        case None => throw new ValidationException(s"Cannot change email of non-existing member (member id ${req.id})")
+      }
+      memberDto <- {
+        val withChangedEmail = member.changeEmail(MemberName(req.email))
+        transactionManager.execute { implicit rc =>
+          memberRepository.save(withChangedEmail)
+        }.map(memberDomainToDto)
+      }
+    } yield {
+      memberDto
+    }
+  }
 
   override def getMembers: Future[Seq[MemberDto]] = membershipQueryService.findAllMembers
+
+  override def getMember(id: Long): Future[MemberDto] = {
+    membershipQueryService.findById(id).map {
+      case Some(member) => member
+      case None => throw new NotFoundException(s"Member with id $id not found")
+    }
+  }
 
   private def memberDomainToDto(member: Member): MemberDto = {
     MemberDto(member.id.value, member.name.value, member.email.value, member.role, member.becameMemberAt)
   }
+
+
 }

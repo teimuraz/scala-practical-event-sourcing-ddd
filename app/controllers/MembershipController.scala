@@ -1,7 +1,8 @@
 package controllers
 
 import backend.auth.AuthContext
-import backend.membership.api.{CreateNewMemberReq, MembershipService}
+import backend.common.Owner
+import backend.membership.api.{ChangeMemberEmailReq, CreateNewMemberReq, MembershipService}
 import javax.inject.{Inject, Singleton}
 import library.error.{UserException, ValidationException}
 import play.api.data.Form
@@ -19,7 +20,7 @@ class MembershipController @Inject()
   extends AbstractController(cc) {
 
   // Hardcode logged in member
-  implicit val authContext: AuthContext = AuthContext(1)
+  implicit val authContext: AuthContext = AuthContext(1, Owner)
 
   def index: Action[AnyContent] = Action.async {
     membershipService.getMembers.map { members =>
@@ -34,13 +35,20 @@ class MembershipController @Inject()
     )(CreateNewMemberReq.apply)(CreateNewMemberReq.unapply)
   )
 
-  def createNewMember: Action[AnyContent] = messagesAction.async { implicit request: MessagesRequest[AnyContent] =>
+  val changeMemberEmailForm = Form(
+    mapping(
+      "id" -> longNumber,
+      "email" -> email.verifying(nonEmpty)
+    )(ChangeMemberEmailReq.apply)(ChangeMemberEmailReq.unapply)
+  )
+
+  def createNewMember: Action[AnyContent] = messagesAction.async { implicit req =>
     Future.successful {
       Ok(views.html.membership.createNewMember(createNewMemberForm))
     }
   }
 
-  def doCreateNewMember: Action[AnyContent] = messagesAction.async { implicit request: MessagesRequest[AnyContent] =>
+  def doCreateNewMember: Action[AnyContent] = messagesAction.async { implicit req =>
     createNewMemberForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful {
@@ -57,5 +65,16 @@ class MembershipController @Inject()
         }
       }
     )
+  }
+
+  def view(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+    membershipService.getMember(memberId).map(member => Ok(views.html.membership.viewMember(member)))
+  }
+
+  def changeEmail(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+    membershipService.getMember(memberId).map { member =>
+      val req = ChangeMemberEmailReq(member.id, "")
+      Ok(views.html.membership.changeMemberEmail(changeMemberEmailForm.fill(req), member))
+    }
   }
 }
