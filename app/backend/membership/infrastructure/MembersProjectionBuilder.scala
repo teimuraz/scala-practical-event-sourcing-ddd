@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.MemberRole
+import backend.common.{MemberRole, Owner}
 import javax.inject.{Inject, Singleton}
 import library.jooq.{Db, JooqRepositorySupport}
 import library.messaging.{Subscriber, Topic}
@@ -21,6 +21,7 @@ class MembersProjectionBuilder @Inject()
       case e: MemberCreated => handle(e)
       case e: MemberNameChanged => handle(e)
       case e: MemberEmailChanged => handle(e)
+      case e: MemberRoleChanged => handle(e)
     }
   }
 
@@ -56,6 +57,14 @@ class MembersProjectionBuilder @Inject()
     rc.dsl
       .update(MEMBERSHIP_MEMBERS)
       .set(MEMBERSHIP_MEMBERS.EMAIL, e.email.value)
+      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id.value))
+      .execute()
+  }
+
+  private def handle(e: MemberRoleChanged)(implicit rc: RepComponents) = {
+    rc.dsl
+      .update(MEMBERSHIP_MEMBERS)
+      .set(MEMBERSHIP_MEMBERS.ROLE, new Integer(MemberRole.intValueOf(e.role)))
       .where(MEMBERSHIP_MEMBERS.ID.eq(e.id.value))
       .execute()
   }

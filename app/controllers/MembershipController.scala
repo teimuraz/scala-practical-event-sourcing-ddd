@@ -132,4 +132,8 @@ class MembershipController @Inject()
       )
     }
   }
+
+  def makeMemberOwner(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+    membershipService.makeMemberAnOwner(memberId).map(_ => Redirect(routes.MembershipController.view(memberId)))
+  }
 }

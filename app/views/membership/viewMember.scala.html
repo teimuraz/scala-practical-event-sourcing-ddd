@@ -1,6 +1,8 @@
 @import backend.membership.api.MemberDto
 @import backend.common.Owner
+@import backend.common.StandardMember
 @import backend.auth.AuthContext
+@import helper._
 @(member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader, context: AuthContext)
 
 @main(
@@ -30,13 +32,12 @@
                         <td>Role</td><td>@member.role</td>
                         <td>
                             @if(context.currentMemberRole == Owner) {
-                                <a href="">
-                                    @if(member.role == Owner) {
-                                        Make a standard member
-                                    } else {
-                                        Make an owner
+                                @if(member.role == StandardMember) {
+                                    @helper.form(action = routes.MembershipController.makeMemberOwner(member.id)) {
+                                        @CSRF.formField
+                                        <button type="submit">Make an owner</button>
                                     }
-                                </a>
+                                }
                             }
                         </td>
                     </tr>

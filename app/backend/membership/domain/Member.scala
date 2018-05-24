@@ -26,9 +26,12 @@ case class Member private(
     applyChange(MemberEmailChanged(id, newEmail))
   }
 
-  def makeMemberAnOwner(anotherMember: Member): Try[Member] = Try({
-    role match {
-      case Owner => anotherMember.copy(role  = Owner)
+  def becomeAnOwner(initiator: Member): Try[Member] = Try({
+    initiator.role match {
+      case Owner => role match {
+        case StandardMember => applyChange(MemberRoleChanged(id, Owner))
+        case Owner => throw new ValidationException(s"Member $name is already an owner")
+      }
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
     }
   })
@@ -45,6 +48,7 @@ case class Member private(
       case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.becameMemberAt, aggregateRootInfo)
       case e: MemberNameChanged => copy(name = e.name)
       case e: MemberEmailChanged => copy(email = e.email)
+      case e: MemberRoleChanged => copy(role = e.role)
     }
   }
 

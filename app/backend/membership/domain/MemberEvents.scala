@@ -14,6 +14,7 @@ object MemberDomainEvent {
       case MemberCreated.eventType => implicitly[Reads[MemberCreated]].map(identity)
       case MemberNameChanged.eventType => implicitly[Reads[MemberNameChanged]].map(identity)
       case MemberEmailChanged.eventType => implicitly[Reads[MemberEmailChanged]].map(identity)
+      case MemberRoleChanged.eventType => implicitly[Reads[MemberRoleChanged]].map(identity)
       case other => Reads(_ => JsError(s"Unknown event type $other"))
     }
   }
@@ -22,6 +23,7 @@ object MemberDomainEvent {
       case m: MemberCreated => (Json.toJson(m)(MemberCreated.format), MemberCreated.eventType)
       case m: MemberNameChanged => (Json.toJson(m)(MemberNameChanged.format), MemberNameChanged.eventType)
       case m: MemberEmailChanged => (Json.toJson(m)(MemberEmailChanged.format), MemberEmailChanged.eventType)
+      case m: MemberRoleChanged => (Json.toJson(m)(MemberRoleChanged.format), MemberEmailChanged.eventType)
     }
     jsValue.transform(__.json.update((__ \ 'eventType).json.put(JsString(eventType)))).get
   }
@@ -58,4 +60,13 @@ case class MemberEmailChanged(id: MemberId, email: Email) extends MemberDomainEv
 object MemberEmailChanged {
   val eventType = "memberEmailChanged"
   implicit val format: OFormat[MemberEmailChanged] = Json.format[MemberEmailChanged]
+}
+
+case class MemberRoleChanged(id: MemberId, role: MemberRole) extends MemberDomainEvent {
+  override def eventType: String = MemberRoleChanged.eventType
+}
+
+object MemberRoleChanged {
+  val eventType = "memberRoleChanged"
+  implicit val format: OFormat[MemberRoleChanged] = Json.format[MemberRoleChanged]
 }

@@ -5,7 +5,7 @@ import backend.common.Email
 import backend.membership.api._
 import backend.membership.domain.{Member, MemberId, MemberName, MemberRepository}
 import javax.inject.{Inject, Singleton}
-import library.error.{NotFoundException, ValidationException}
+import library.error.{ForbiddenException, NotFoundException, ValidationException}
 import library.jooq.TransactionManager
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -106,6 +106,34 @@ class MembershipServiceImpl @Inject()
     }
   }
 
+
+  override def makeMemberAnOwner(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
+    val ownerFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val standardMemberFuture = memberRepository.findById(MemberId(memberId))
+    for {
+      owner <- ownerFuture.map {
+        case Some(owner) => owner
+        case None => throw new ValidationException("Current member not found")
+      }
+      standardMember <- standardMemberFuture.map {
+        case Some(member) => member
+        case None => throw new ValidationException("Cannot make non existing member an owner")
+      }
+      newOwnerDto <- {
+        standardMember.becomeAnOwner(owner) match {
+          case Success(newOwner) =>
+            transactionManager.execute { implicit rc =>
+              memberRepository.save(newOwner)
+            }
+            .map(memberDomainToDto)
+          case Failure(e) => Future.failed(e)
+        }
+      }
+    } yield {
+      newOwnerDto
+    }
+  }
+
   override def getMembers: Future[Seq[MemberDto]] = membershipQueryService.findAllMembers
 
   override def getMember(id: Long): Future[MemberDto] = {
@@ -118,6 +146,8 @@ class MembershipServiceImpl @Inject()
   private def memberDomainToDto(member: Member): MemberDto = {
     MemberDto(member.id.value, member.name.value, member.email.value, member.role, member.becameMemberAt)
   }
+
+
 
 
 }
