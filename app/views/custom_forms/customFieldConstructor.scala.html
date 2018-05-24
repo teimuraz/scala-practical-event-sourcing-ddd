@@ -1,6 +1,9 @@
 @(elements: helper.FieldElements)
 
 <div class="form-group">
+    @*@if(elements.args.get('type).isDefined && elements.args('type) != "hidden") {*@
+        @*<label class="form-control-label is-invalid" for="@elements.id">@elements.label</label>*@
+    @*}*@
     <label class="form-control-label is-invalid" for="@elements.id">@elements.label</label>
     @elements.input
     @if(elements.hasErrors) {

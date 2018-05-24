@@ -19,7 +19,7 @@
         <h3 class="card-title">Change name of member @member.name</h3>
         @helper.form(action = routes.MembershipController.doChangeName(member.id)) {
             @CSRF.formField
-            @inputText(form("id"), '_label -> Messages("Id"), 'class -> "form-control")
+            <input type="hidden" name="id" value="@member.id" />
             @inputText(form("name"), '_label -> Messages("New name"), 'class -> "form-control")
             @if(form.hasGlobalErrors) {
                 <div class="alert alert-danger" role="alert">

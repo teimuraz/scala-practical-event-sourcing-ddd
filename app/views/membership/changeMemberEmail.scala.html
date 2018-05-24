@@ -4,22 +4,22 @@
 @import views.custom_forms.Helpers._
 @(form: Form[ChangeMemberEmailReq], member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
 
-    @main(
-        ViewCommonData(
-            title = "Create new member",
-            breadCrumbs = Seq(
-                BreadCrumb("Membership", Some(routes.MembershipController.index.url)),
-                BreadCrumb(member.name, Some(routes.MembershipController.view(member.id).url)),
-                BreadCrumb("Change email")
-            )
-        ),
-        assetsFinder) {
-
+@main(
+    ViewCommonData(
+        title = "Create new member",
+        breadCrumbs = Seq(
+            BreadCrumb("Membership", Some(routes.MembershipController.index.url)),
+            BreadCrumb(member.name, Some(routes.MembershipController.view(member.id).url)),
+            BreadCrumb("Change email")
+        )
+    ),
+    assetsFinder) {
     <div class="card">
         <div class="card-body">
         <h3 class="card-title">Change email of member @member.name</h3>
-        @helper.form(action = routes.MembershipController.doCreateNewMember()) {
+        @helper.form(action = routes.MembershipController.doChangeEmail(member.id)) {
             @CSRF.formField
+            <input type="hidden" name="id" value="@member.id" />
             @inputText(form("email"), '_label -> Messages("New email"), 'class -> "form-control")
             @if(form.hasGlobalErrors) {
                 <div class="alert alert-danger" role="alert">

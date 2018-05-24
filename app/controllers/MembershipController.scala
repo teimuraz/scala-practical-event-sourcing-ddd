@@ -112,4 +112,24 @@ class MembershipController @Inject()
       Ok(views.html.membership.changeMemberEmail(changeMemberEmailForm.fill(changeMemberEmailReq), member))
     }
   }
+
+  def doChangeEmail(memberId: Long): Action[AnyContent] = messagesAction.async { implicit  req =>
+    membershipService.getMember(memberId).flatMap { member =>
+      changeMemberEmailForm.bindFromRequest.fold(
+        formWithErrors => {
+          Future.successful(BadRequest(views.html.membership.changeMemberEmail(formWithErrors, member)))
+        },
+        changeMemberEmailReq => {
+          membershipService.changeMemberEmail(changeMemberEmailReq).map { _ =>
+            Redirect(routes.MembershipController.view(changeMemberEmailReq.id))
+          }
+            .recover {
+              case e =>
+                val form = changeMemberEmailForm.fill(changeMemberEmailReq).withGlobalError(e.getMessage)
+                BadRequest(views.html.membership.changeMemberEmail(form, member))
+            }
+        }
+      )
+    }
+  }
 }
