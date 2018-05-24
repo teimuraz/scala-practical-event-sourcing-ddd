@@ -96,7 +96,7 @@ class MembershipServiceImpl @Inject()
         case None => throw new ValidationException(s"Cannot change email of non-existing member (member id ${req.id})")
       }
       memberDto <- {
-        val withChangedEmail = member.changeEmail(MemberName(req.email))
+        val withChangedEmail = member.changeEmail(Email(req.email))
         transactionManager.execute { implicit rc =>
           memberRepository.save(withChangedEmail)
         }.map(memberDomainToDto)

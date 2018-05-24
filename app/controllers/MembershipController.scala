@@ -2,7 +2,7 @@ package controllers
 
 import backend.auth.AuthContext
 import backend.common.Owner
-import backend.membership.api.{ChangeMemberEmailReq, CreateNewMemberReq, MembershipService}
+import backend.membership.api.{ChangeMemberEmailReq, ChangeMemberNameReq, CreateNewMemberReq, MembershipService}
 import javax.inject.{Inject, Singleton}
 import library.error.{UserException, ValidationException}
 import play.api.data.Form
@@ -33,6 +33,13 @@ class MembershipController @Inject()
       "name" -> nonEmptyText,
       "email" -> email.verifying(nonEmpty),
     )(CreateNewMemberReq.apply)(CreateNewMemberReq.unapply)
+  )
+
+  val changeMemberNameForm = Form(
+    mapping(
+      "id" -> longNumber,
+      "name" -> nonEmptyText
+    )(ChangeMemberNameReq.apply)(ChangeMemberNameReq.unapply)
   )
 
   val changeMemberEmailForm = Form(
@@ -71,10 +78,17 @@ class MembershipController @Inject()
     membershipService.getMember(memberId).map(member => Ok(views.html.membership.viewMember(member)))
   }
 
-  def changeEmail(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+  def changeName(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req: MessagesRequest[AnyContent] =>
     membershipService.getMember(memberId).map { member =>
-      val req = ChangeMemberEmailReq(member.id, "")
-      Ok(views.html.membership.changeMemberEmail(changeMemberEmailForm.fill(req), member))
+      val changeMemberNameReq = ChangeMemberNameReq(member.id, member.name)
+      Ok(views.html.membership.changeMemberName(changeMemberNameForm.fill(changeMemberNameReq), member))
+    }
+  }
+
+  def changeEmail(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req: MessagesRequest[AnyContent] =>
+    membershipService.getMember(memberId).map { member =>
+      val changeMemberEmailReq = ChangeMemberEmailReq(member.id, member.email)
+      Ok(views.html.membership.changeMemberEmail(changeMemberEmailForm.fill(changeMemberEmailReq), member))
     }
   }
 }

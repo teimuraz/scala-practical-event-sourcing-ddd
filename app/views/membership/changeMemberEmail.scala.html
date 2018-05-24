@@ -1,24 +1,33 @@
 @import helper._
 @import backend.membership.api.ChangeMemberEmailReq
 @import backend.membership.api.MemberDto
+@import views.custom_forms.Helpers._
 @(form: Form[ChangeMemberEmailReq], member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader)
 
-@main("Change member email", assetsFinder) {
+    @main(
+        ViewCommonData(
+            title = "Create new member",
+            breadCrumbs = Seq(
+                BreadCrumb("Membership", Some(routes.MembershipController.index.url)),
+                BreadCrumb(member.name, Some(routes.MembershipController.view(member.id).url)),
+                BreadCrumb("Change email")
+            )
+        ),
+        assetsFinder) {
 
     <div class="card">
         <div class="card-body">
-        <h3 class="card-title">Create new member</h3>
+        <h3 class="card-title">Change email of member @member.name</h3>
         @helper.form(action = routes.MembershipController.doCreateNewMember()) {
             @CSRF.formField
-            @inputText(createNewMemberForm("name"), '_label -> Messages("Name"), 'class -> "form-control")
-            @inputText(createNewMemberForm("email"), '_label -> Messages("Email"), 'class -> "form-control")
-            @if(createNewMemberForm.hasGlobalErrors) {
+            @inputText(form("email"), '_label -> Messages("New email"), 'class -> "form-control")
+            @if(form.hasGlobalErrors) {
                 <div class="alert alert-danger" role="alert">
-                    @createNewMemberForm.globalError.map(_.format).mkString("<br />")
+                    @form.globalError.map(_.format).mkString("<br />")
                 </div>
             }
 
-            <button type="submit" class="btn btn-success">Create</button>
+            <button type="submit" class="btn btn-success">Change Email</button>
         }
         </div>
     </div>

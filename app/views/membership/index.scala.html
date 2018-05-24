@@ -1,8 +1,14 @@
 @import backend.membership.api.MemberDto
 @(members: Seq[MemberDto])(implicit assetsFinder: AssetsFinder)
 
-@main("Practical Event Sourcing and Domain Driven Design", assetsFinder) {
-
+@main(
+    ViewCommonData(
+        title = "Practical Event Sourcing and Domain Driven Design",
+        breadCrumbs = Seq(
+            BreadCrumb("Membership", Some(routes.MembershipController.index.url))
+        )
+    ),
+    assetsFinder) {
     <a class="btn btn-primary float-right" href="@routes.MembershipController.createNewMember()" role="button">
         Create new Member
     </a>

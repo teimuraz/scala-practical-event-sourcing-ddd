@@ -3,7 +3,15 @@
 @import backend.auth.AuthContext
 @(member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader, context: AuthContext)
 
-@main(s"Member ${member.name}", assetsFinder) {
+@main(
+    ViewCommonData(
+        title = s"Member ${member.name}",
+        breadCrumbs = Seq(
+            BreadCrumb("Membership", Some(routes.MembershipController.index.url)),
+            BreadCrumb(member.name)
+        )
+    ),
+    assetsFinder) {
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">Member @member.name</h3>
@@ -13,10 +21,10 @@
                         <td>Member ID</td><td>@member.id</td><td></td>
                     </tr>
                     <tr>
-                        <td>Name</td><td>@member.name</td><td><a href="">Change name</a></td>
+                        <td>Name</td><td>@member.name</td><td><a href="@routes.MembershipController.changeName(member.id)">Change name</a></td>
                     </tr>
                     <tr>
-                        <td>Email</td><td>@member.email</td><td><a href="">Change email</a></td>
+                        <td>Email</td><td>@member.email</td><td><a href="@routes.MembershipController.changeEmail(member.id)">Change email</a></td>
                     </tr>
                     <tr>
                         <td>Role</td><td>@member.role</td>

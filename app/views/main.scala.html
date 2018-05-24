@@ -1,10 +1,10 @@
-@(title: String, assetsFinder: AssetsFinder)(content: Html)
+@(commonData: ViewCommonData, assetsFinder: AssetsFinder)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         @* Here's where we render the page title `String`. *@
-        <title>@title</title>
+        <title>@commonData.title</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.min.css")" >
         <link rel="shortcut icon" type="image/png" href="@assetsFinder.path("images/favicon.png")">
 
@@ -19,7 +19,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Membership <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="@routes.MembershipController.index()">Membership <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Issue Tracker</a>
@@ -31,6 +31,22 @@
                 </div>
             </div>
         </nav>
+
+        <div class="container-fluid" style="background-color: #E9ECEF">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        @for(breadcrumb <- commonData.breadCrumbs.dropRight(1)) {
+                            <li class="breadcrumb-item"><a href="@breadcrumb.url">@breadcrumb.label</a></li>
+                        }
+
+                        @if(commonData.breadCrumbs.nonEmpty) {
+                            <li class="breadcrumb-item active">@commonData.breadCrumbs.last.label</li>
+                        }
+                    </ol>
+                </nav>
+            </div>
+        </div>
 
         @* And here's where we render the `Html` object containing
         * the page content. *@
