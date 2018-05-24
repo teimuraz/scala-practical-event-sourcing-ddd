@@ -18,6 +18,7 @@ trait MembershipService {
   def changeMemberName(req: ChangeMemberNameReq): Future[MemberDto]
   def changeMemberEmail(req: ChangeMemberEmailReq): Future[MemberDto]
   def makeMemberAnOwner(memberId: Long)(implicit context: AuthContext): Future[MemberDto]
+  def makeMemberAStandardMember(memberId: Long)(implicit context: AuthContext): Future[MemberDto]
   def getMembers: Future[Seq[MemberDto]]
   def getMember(id: Long): Future[MemberDto]
 }

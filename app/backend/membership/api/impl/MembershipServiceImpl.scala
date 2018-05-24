@@ -108,19 +108,19 @@ class MembershipServiceImpl @Inject()
 
 
   override def makeMemberAnOwner(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
-    val ownerFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
     val standardMemberFuture = memberRepository.findById(MemberId(memberId))
     for {
-      owner <- ownerFuture.map {
+      initiator <- initiatorFuture.map {
         case Some(owner) => owner
-        case None => throw new ValidationException("Current member not found")
+        case None => throw new ValidationException(s"Initiator with id ${context.currentMemberId} not found")
       }
       standardMember <- standardMemberFuture.map {
         case Some(member) => member
-        case None => throw new ValidationException("Cannot make non existing member an owner")
+        case None => throw new ValidationException(s"Cannot make non existing member an owner (member id: $memberId)")
       }
       newOwnerDto <- {
-        standardMember.becomeAnOwner(owner) match {
+        standardMember.becomeAnOwner(initiator) match {
           case Success(newOwner) =>
             transactionManager.execute { implicit rc =>
               memberRepository.save(newOwner)
@@ -131,6 +131,33 @@ class MembershipServiceImpl @Inject()
       }
     } yield {
       newOwnerDto
+    }
+  }
+
+  override def makeMemberAStandardMember(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
+    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val targetOwnerFuture = memberRepository.findById(MemberId(memberId))
+    for {
+      initiator <- initiatorFuture.map {
+        case Some(owner) => owner
+        case None => throw new ValidationException("Initiator with id ${context.currentMemberId} not found")
+      }
+      targetOwner <- targetOwnerFuture.map {
+        case Some(owner) => owner
+        case None => throw new ValidationException(s"Cannot make non existing member a standard member (member id: $memberId)")
+      }
+      standardMemberDto <- {
+        targetOwner.becomeAStandardMember(initiator) match {
+          case Success(standardMember) =>
+            transactionManager.execute { implicit rc =>
+              memberRepository.save(standardMember)
+            }
+              .map(memberDomainToDto)
+          case Failure(e) => Future.failed(e)
+        }
+      }
+    } yield {
+      standardMemberDto
     }
   }
 

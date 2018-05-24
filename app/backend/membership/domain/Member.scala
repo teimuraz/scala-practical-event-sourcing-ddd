@@ -6,8 +6,9 @@ import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
 import org.joda.time.DateTime
 import play.api.libs.json._
-
 import scala.util.Try
+
+// TODO:: Better to use ADT instead of role param
 
 case class Member private(
     id: MemberId,
@@ -33,6 +34,16 @@ case class Member private(
         case Owner => throw new ValidationException(s"Member $name is already an owner")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
+    }
+  })
+
+  def becomeAStandardMember(initiator: Member): Try[Member] = Try({
+    initiator.role match {
+      case Owner => role match {
+        case StandardMember => applyChange(MemberRoleChanged(id, StandardMember))
+        case Owner => throw new ValidationException(s"Member $name is already a standard member")
+      }
+      case _ => throw new ForbiddenException("Only owner can make another members as standard member")
     }
   })
 
