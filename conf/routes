@@ -7,6 +7,7 @@ GET         /membership/create-new-member           controllers.MembershipContro
 POST        /membership/create-new-member           controllers.MembershipController.doCreateNewMember
 GET         /membership/:memberId                   controllers.MembershipController.view(memberId: Long)
 GET         /membership/:memberId/change-name       controllers.MembershipController.changeName(memberId: Long)
+POST        /membership/:memberId/change-name       controllers.MembershipController.doChangeName(memberId: Long)
 GET         /membership/:memberId/change-email      controllers.MembershipController.changeEmail(memberId: Long)
 
 # Map static resources from the /public folder to the /assets URL path

@@ -10,6 +10,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints.nonEmpty
+import views.html.helper.form
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -63,9 +64,9 @@ class MembershipController @Inject()
         }
       },
       createNewMemberReq => {
-        membershipService.createNewMember(createNewMemberReq).map( member =>
+        membershipService.createNewMember(createNewMemberReq).map{ _ =>
           Redirect(routes.MembershipController.index())
-        ).recover {
+        }.recover {
           case e: UserException =>
             val form = createNewMemberForm.fill(createNewMemberReq).withGlobalError(e.getMessage)
             BadRequest(views.html.membership.createNewMember(form))
@@ -78,10 +79,30 @@ class MembershipController @Inject()
     membershipService.getMember(memberId).map(member => Ok(views.html.membership.viewMember(member)))
   }
 
-  def changeName(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req: MessagesRequest[AnyContent] =>
+  def changeName(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
     membershipService.getMember(memberId).map { member =>
       val changeMemberNameReq = ChangeMemberNameReq(member.id, member.name)
       Ok(views.html.membership.changeMemberName(changeMemberNameForm.fill(changeMemberNameReq), member))
+    }
+  }
+
+  def doChangeName(memberId: Long): Action[AnyContent] = messagesAction.async { implicit  req =>
+    membershipService.getMember(memberId).flatMap { member =>
+      changeMemberNameForm.bindFromRequest.fold(
+        formWithErrors => {
+            Future.successful(BadRequest(views.html.membership.changeMemberName(formWithErrors, member)))
+        },
+        changeMemberNameReq => {
+          membershipService.changeMemberName(changeMemberNameReq).map { _ =>
+            Redirect(routes.MembershipController.view(changeMemberNameReq.id))
+          }
+          .recover {
+            case e =>
+              val form = changeMemberNameForm.fill(changeMemberNameReq).withGlobalError(e.getMessage)
+              BadRequest(views.html.membership.changeMemberName(form, member))
+          }
+        }
+      )
     }
   }
 
