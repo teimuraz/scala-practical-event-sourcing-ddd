@@ -23,13 +23,16 @@ trait AggregateRoot[E <: AggregateRoot[E, ID, Event], ID, Event <: DomainEvent] 
 
   def copyWithInfo(info: AggregateRootInfo[Event]): E
 
-  protected def applyChange(event: Event, isNew: Boolean = true): E = {
-    if (isNew) {
-      val newInfo: AggregateRootInfo[Event] = aggregateRootInfo.copy(uncommittedEvents = aggregateRootInfo.uncommittedEvents :+ event)
-      val withAppliedEvent = this.applyEvent(event)
-      withAppliedEvent.copyWithInfo(newInfo)
-    } else {
-      this.applyEvent(event)
-    }
+  protected def applyNewChange(event: Event): E = {
+    val newInfo: AggregateRootInfo[Event] = aggregateRootInfo.copy(uncommittedEvents = aggregateRootInfo.uncommittedEvents :+ event)
+    val withAppliedEvent = this.applyEvent(event)
+    withAppliedEvent.copyWithInfo(newInfo)
   }
+
+  protected def applyNewChange(events: List[Event]): E = {
+    val newInfo: AggregateRootInfo[Event] = aggregateRootInfo.copy(uncommittedEvents = aggregateRootInfo.uncommittedEvents ++ events)
+    val withAppliedEvents = events.foldLeft(this)((state, e) => state.applyEvent(e))
+    withAppliedEvents.copyWithInfo(newInfo)
+  }
+
 }

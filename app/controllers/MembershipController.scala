@@ -133,7 +133,11 @@ class MembershipController @Inject()
     }
   }
 
-  def makeMemberOwner(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+  def makeMemberAnOwner(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
     membershipService.makeMemberAnOwner(memberId).map(_ => Redirect(routes.MembershipController.view(memberId)))
+  }
+
+  def makeMemberAStandardMember(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+    membershipService.makeMemberAStandardMember(memberId).map(_ => Redirect(routes.MembershipController.view(memberId)))
   }
 }

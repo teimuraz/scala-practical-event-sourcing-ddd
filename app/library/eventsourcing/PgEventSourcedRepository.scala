@@ -37,17 +37,6 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
 
   private def doFindById(id: ID, dsl: DSLContext): Option[E] = {
     import scala.collection.JavaConverters._
-    val query =  dsl
-      .selectFrom(EVENTS_JOURNAL)
-      .where(
-        EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE.eq(aggregateRootType.value)
-          // let's assume that all ids values are of type Long
-          .and(EVENTS_JOURNAL.AGGREGATE_ROOT_ID.eq(idAsLong(id)))
-      )
-      .orderBy(EVENTS_JOURNAL.EVENT_OFFSET)
-
-    query.getSQL
-    Logger.info(query.getSQL())
     val eventRecords = dsl
       .selectFrom(EVENTS_JOURNAL)
       .where(

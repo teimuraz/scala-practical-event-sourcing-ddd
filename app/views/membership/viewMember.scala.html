@@ -32,12 +32,19 @@
                         <td>Role</td><td>@member.role</td>
                         <td>
                             @if(context.currentMemberRole == Owner) {
-                                @if(member.role == StandardMember) {
-                                    @helper.form(action = routes.MembershipController.makeMemberOwner(member.id)) {
-                                        @CSRF.formField
-                                        <button type="submit">Make an owner</button>
+                                    @if(member.role == StandardMember) {
+                                        @helper.form(action = routes.MembershipController.makeMemberAnOwner(member.id)) {
+                                            @CSRF.formField
+                                            <button type="submit">Make an owner</button>
+                                        }
+                                    } else {
+                                        @if(member.id != context.currentMemberId) {
+                                            @helper.form(action = routes.MembershipController.makeMemberAStandardMember(member.id)) {
+                                                @CSRF.formField
+                                                <button type="submit">Make a standard member</button>
+                                            }
+                                        }
                                     }
-                                }
                             }
                         </td>
                     </tr>

@@ -12,13 +12,13 @@ import scala.util.Try
 case class Organization private(id: OrganizationId, name: OrganizationName, ownersCount: Int, aggregateRootInfo: AggregateRootInfo[OrganizationDomainEvent])
   extends AggregateRoot[Organization, OrganizationId, OrganizationDomainEvent] {
 
-  def increaseOwnersCount: Organization = applyChange(OwnersCountIncreased(id, ownersCount + 1))
+  def increaseOwnersCount: Organization = applyNewChange(OwnersCountIncreased(id, ownersCount + 1))
 
   def decreaseOwnersCount: Try[Organization] = Try({
     if (ownersCount == 1) {
       throw new ForbiddenException("Organization should have at least 1 owner")
     }
-    applyChange(OwnersCountDecreased(id, ownersCount - 1))
+    applyNewChange(OwnersCountDecreased(id, ownersCount - 1))
   })
 
   override def applyEvent(event: OrganizationDomainEvent): Organization = {

@@ -29,7 +29,7 @@ class OrganizationOwnersCountUpdater @Inject()
         changeOrganizationOwnersCount(e.id, Increase)
       }
       case e: MemberBecameAnOwner => changeOrganizationOwnersCount(e.id, Increase)
-      case e: MemberBecameAStandardMember => changeOrganizationOwnersCount(e.id, Decrease)
+      case e: MemberUnBecameAnOwner => changeOrganizationOwnersCount(e.id, Decrease)
       case _ => ()
     }
   }

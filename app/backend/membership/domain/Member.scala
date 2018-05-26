@@ -21,17 +21,17 @@ case class Member private(
 ) extends AggregateRoot[Member, MemberId, MemberDomainEvent] {
 
   def changeName(newName: MemberName): Member = {
-    applyChange(MemberNameChanged(id, newName))
+    applyNewChange(MemberNameChanged(id, newName))
   }
 
   def changeEmail(newEmail: Email): Member = {
-    applyChange(MemberEmailChanged(id, newEmail))
+    applyNewChange(MemberEmailChanged(id, newEmail))
   }
 
   def becomeAnOwner(initiator: Member): Try[Member] = Try({
     initiator.role match {
       case Owner => role match {
-        case StandardMember => applyChange(MemberBecameAnOwner(id, Owner))
+        case StandardMember => applyNewChange(MemberBecameAnOwner(id, Owner))
         case Owner => throw new ValidationException(s"Member $name is already an owner")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
@@ -40,9 +40,15 @@ case class Member private(
 
   def becomeAStandardMember(initiator: Member): Try[Member] = Try({
     initiator.role match {
-      case Owner => role match {
-        case StandardMember => applyChange(MemberBecameAStandardMember(id, StandardMember))
-        case Owner => throw new ValidationException(s"Member $name is already a standard member")
+      case Owner =>
+        role match {
+          case Owner =>
+            val changes = List(
+              MemberBecameAStandardMember(id, StandardMember),
+              MemberUnBecameAnOwner(id, StandardMember)
+            )
+            applyNewChange(changes)
+        case StandardMember => throw new ValidationException(s"Member ${name.value} is already a standard member")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as standard member")
     }
@@ -61,6 +67,8 @@ case class Member private(
       case e: MemberNameChanged => copy(name = e.name)
       case e: MemberEmailChanged => copy(email = e.email)
       case e: MemberBecameAnOwner => copy(role = e.role)
+      case e: MemberUnBecameAnOwner => this // do nothing
+      case e: MemberBecameAStandardMember => copy(role = e.role)
     }
   }
 
