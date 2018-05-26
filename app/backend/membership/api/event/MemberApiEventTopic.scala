@@ -1,4 +1,4 @@
-package backend.membership.api
+package backend.membership.api.event
 
 import javax.inject.Singleton
 import library.messaging.Topic

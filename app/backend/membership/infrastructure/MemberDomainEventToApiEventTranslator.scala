@@ -1,10 +1,11 @@
 package backend.membership.infrastructure
 
-import backend.membership.api.MemberApiEventTopic
-import backend.membership.domain.{MemberCreated, MemberDomainEvent, MemberDomainEventTopic}
+import backend.membership.api.event.MemberApiEventTopic
+import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.messaging.{Subscriber, Topic}
 import library.repository.RepComponents
+import backend.membership.api.{event => apiEvent}
 
 @Singleton
 class MemberDomainEventToApiEventTranslator @Inject()
@@ -20,9 +21,16 @@ class MemberDomainEventToApiEventTranslator @Inject()
    * @param additionalData
    */
   override def handle(message: MemberDomainEvent)(implicit additionalData: RepComponents): Unit = {
-    val apiEvent = message match {
+    val evt = message match {
       case e: MemberCreated
-        => backend.membership.api.MemberCreated(e.id, e.name, e.email, e.role, e.becameMemberAt)
+        => Some(apiEvent.MemberCreated(e.id, e.name, e.email, e.role, e.becameMemberAt))
+      case e: MemberNameChanged
+        => Some(apiEvent.MemberNameChanged(e.id, e.name))
+      case e: MemberEmailChanged
+        => Some(apiEvent.MemberEmailChanged(e.id, e.email))
+      case _ => None
     }
+
+    evt.foreach(memberApiEventTopic.publish(_))
   }
 }

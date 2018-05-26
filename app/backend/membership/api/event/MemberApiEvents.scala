@@ -1,4 +1,4 @@
-package backend.membership.api
+package backend.membership.api.event
 
 import backend.common.types.{Email, MemberId, MemberName, MemberRole}
 import org.joda.time.DateTime

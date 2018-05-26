@@ -1,4 +1,4 @@
-import backend.membership.api.{MemberApiEventTopic, MembershipService}
+import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
 import backend.membership.domain.{MemberDomainEventTopic, MemberRepository, OrganizationRepository}
 import backend.membership.infrastructure._
