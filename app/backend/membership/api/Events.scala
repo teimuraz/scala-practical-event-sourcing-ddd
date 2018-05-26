@@ -1,19 +1,20 @@
 package backend.membership.api
 
-import backend.common.MemberRole
+import backend.common.types.{Email, MemberRole}
+import backend.membership.domain.{MemberId, MemberName}
 import org.joda.time.DateTime
 
-trait MemberEvent
+trait MemberApiEvent
 
 case class MemberCreated(
-  id: Long,
-  name: String,
-  email: String,
+  id: MemberId,
+  name: MemberName,
+  email: Email,
   role: MemberRole,
   becameMemberAt: DateTime
-) extends MemberEvent
+) extends MemberApiEvent
 
-case class MemberNameChanged(id: Long, name: String) extends MemberEvent
-
-case class MemberEmailChanged(id: Long, email: String) extends MemberEvent
+case class MemberNameChanged(id: MemberId, name: MemberName) extends MemberApiEvent
+case class MemberEmailChanged(id: MemberId, email: Email) extends MemberApiEvent
+case class MemberDisconnected(id: MemberId) extends MemberApiEvent
 

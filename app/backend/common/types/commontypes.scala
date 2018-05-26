@@ -1,4 +1,4 @@
-package backend.common
+package backend.common.types
 
 import library.error.ValidationException
 import library.validation.{DefaultMessage, EmailValidatable, StringValidatable}
@@ -96,3 +96,4 @@ object MemberRole {
   implicit val reads: Reads[MemberRole] = Reads.of[Int].map(valueOf)
   implicit val writes: Writes[MemberRole] = (o: MemberRole) => JsNumber(intValueOf(o))
 }
+

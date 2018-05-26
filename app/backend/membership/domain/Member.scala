@@ -1,6 +1,6 @@
 package backend.membership.domain
 
-import backend.common._
+import backend.common.types._
 import library.error.{ForbiddenException, ValidationException}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}

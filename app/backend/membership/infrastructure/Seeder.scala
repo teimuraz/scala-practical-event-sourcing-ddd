@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.{Email, Owner}
+import backend.common.types.{Email, Owner}
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.jooq.{JooqRepositorySupport, TransactionManager}

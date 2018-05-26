@@ -1,6 +1,6 @@
 package backend.membership.api.impl
 
-import backend.common.MemberRole
+import backend.common.types.MemberRole
 import backend.membership.api.MemberDto
 import javax.inject.{Inject, Singleton}
 import library.jooq.Db
@@ -8,7 +8,6 @@ import backend.jooq.generated.Tables.MEMBERSHIP_MEMBERS
 import backend.jooq.generated.tables.records.MembershipMembersRecord
 
 import scala.collection.JavaConverters._
-import scala.collection.immutable
 import scala.concurrent.Future
 
 @Singleton

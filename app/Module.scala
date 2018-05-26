@@ -1,4 +1,4 @@
-import backend.membership.api.{MemberTopic, MembershipService}
+import backend.membership.api.{MemberApiEventTopic, MembershipService}
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
 import backend.membership.domain.{MemberDomainEventTopic, MemberRepository, OrganizationRepository}
 import backend.membership.infrastructure._
@@ -28,6 +28,7 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
     bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
+    bind(classOf[MemberDomainEventToApiEventTranslator]).asEagerSingleton()
 
     bind(classOf[OrganizationRepository]).to(classOf[EventSourcedOrganizationRepository])
     bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()

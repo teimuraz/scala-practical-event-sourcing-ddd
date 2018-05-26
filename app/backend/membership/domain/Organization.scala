@@ -1,10 +1,8 @@
 package backend.membership.domain
 
-import backend.common.{Email, MemberRole, StandardMember}
 import library.error.ForbiddenException
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
-import org.joda.time.DateTime
 import play.api.libs.json.{JsNumber, JsString, Reads, Writes}
 
 import scala.util.Try

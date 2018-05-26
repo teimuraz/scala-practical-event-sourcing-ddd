@@ -1,7 +1,7 @@
 package backend.membership.api.impl
 
 import backend.auth.AuthContext
-import backend.common.Email
+import backend.common.types.Email
 import backend.membership.api._
 import backend.membership.domain.{Member, MemberId, MemberName, MemberRepository}
 import javax.inject.{Inject, Singleton}
