@@ -9,7 +9,7 @@ import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
 import library.jooq.Db
 import library.messaging.Topic
 import library.repository.RepComponents
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.{OFormat, Reads, Writes}
 import backend.jooq.generated.Sequences.MEMBERSHIP_MEMBERS_SEQ
 
 import scala.concurrent.Future
@@ -26,10 +26,7 @@ class EventSourcedMemberRepository @Inject()
 
   override def emptyState: Member = Member.empty
 
-  override implicit def writes: Writes[MemberDomainEvent] = MemberDomainEvent.writes
-
-  override implicit def reads: Reads[MemberDomainEvent] = MemberDomainEvent.reads
-
+  override implicit def format: OFormat[MemberDomainEvent] = MemberDomainEvent.format
 
   override def idAsLong(id: MemberId): Long = id.value
 

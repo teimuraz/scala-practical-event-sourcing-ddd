@@ -1,10 +1,7 @@
 package library.eventsourcing
 
-import play.api.Logger
 
-trait DomainEvent {
-  def eventType: String
-}
+trait DomainEvent
 
 case class AggregateRootInfo[Event <: DomainEvent](uncommittedEvents: List[Event], version: Int)
 

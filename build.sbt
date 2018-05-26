@@ -21,6 +21,9 @@ libraryDependencies += "com.typesafe.play" % "play-json-joda_2.12" % "2.6.3"
 libraryDependencies += "org.joda" % "joda-convert" % "1.7"
 libraryDependencies += "net.debasishg" %% "redisclient" % "3.4"
 libraryDependencies += "com.typesafe.akka" %% "akka-persistence" % "2.5.8"
+// https://mvnrepository.com/artifact/org.julienrf/play-json-derived-codecs
+libraryDependencies += "org.julienrf" %% "play-json-derived-codecs" % "4.0.0"
+
 
 
 libraryDependencies += "org.webjars" % "bootstrap" % "4.1.0"

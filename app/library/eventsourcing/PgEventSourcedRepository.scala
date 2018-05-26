@@ -24,8 +24,7 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
   def topic: Option[Topic[Event, RepComponents]] = None
   def idAsLong(id: ID): Long
 
-  implicit def writes: Writes[Event]
-  implicit def reads: Reads[Event]
+  implicit def format: OFormat[Event]
 
   override def findById(id: ID): Future[Option[E]] = {
     db.query { dsl =>
@@ -68,7 +67,6 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
     aggregateRoot.aggregateRootInfo.uncommittedEvents.foreach { e =>
       version = version + 1
       val event = Json.toJson(e)
-      val eventType = e.eventType
       rc.dsl
         .insertInto(EVENTS_JOURNAL,
           EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE,
@@ -80,7 +78,7 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
         .values(
           aggregateRootType.value,
           aggregateRoot.idAsLong,
-          eventType,
+          e.getClass.getSimpleName,
           event,
           version
         )

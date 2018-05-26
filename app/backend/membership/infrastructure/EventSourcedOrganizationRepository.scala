@@ -9,7 +9,7 @@ import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
 import library.jooq.Db
 import library.messaging.Topic
 import library.repository.RepComponents
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.{OFormat, Reads, Writes}
 
 import scala.concurrent.Future
 
@@ -27,9 +27,7 @@ class EventSourcedOrganizationRepository @Inject()(val db: Db, organizationDomai
 
   override def idAsLong(id: OrganizationId): Long = id.value
 
-  override implicit def writes: Writes[OrganizationDomainEvent] = OrganizationDomainEvent.writes
-
-  override implicit def reads: Reads[OrganizationDomainEvent] = OrganizationDomainEvent.reads
+  override implicit def format: OFormat[OrganizationDomainEvent] = OrganizationDomainEvent.format
 
   override def nextId: Future[OrganizationId] = {
     db.query { dsl =>

@@ -1,21 +1,21 @@
-package backend.membership.domain
+package backend.tracker.domain
 
 import backend.common.types._
+import julienrf.json.derived.flat
 import library.eventsourcing.DomainEvent
 import org.joda.time.DateTime
 import play.api.libs.json._
 import library.joda.json.jsonDateTimeFormat
-import julienrf.json.derived.flat
 
 sealed trait MemberDomainEvent extends DomainEvent
 
 case class MemberCreated(
-    id: MemberId,
-    name: MemberName,
-    email: Email,
-    role: MemberRole,
-    organizationId: OrganizationId,
-    becameMemberAt: DateTime
+  id: MemberId,
+  name: MemberName,
+  email: Email,
+  role: MemberRole,
+  organizationId: OrganizationId,
+  becameMemberAt: DateTime
 ) extends MemberDomainEvent
 
 object MemberCreated {
@@ -61,3 +61,4 @@ object MemberDisconnected {
 object MemberDomainEvent {
   implicit lazy val format: OFormat[MemberDomainEvent] = flat.oformat((__ \ "eventType").format[String])
 }
+

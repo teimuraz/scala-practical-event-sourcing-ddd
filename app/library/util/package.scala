@@ -13,6 +13,14 @@ package object util {
       import java.text.Normalizer
       Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\w ]", "").replace(" ", "-").toLowerCase
     }
+
+    def lowerCaseFirstCharacter: String = {
+      if (str.length > 0) {
+        Character.toLowerCase(str.charAt(0)) + str.substring(1)
+      } else {
+        str
+      }
+    }
   }
 }
 
