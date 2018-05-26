@@ -12,6 +12,7 @@ GET         /membership/:memberId/change-email      controllers.MembershipContro
 POST        /membership/:memberId/change-email      controllers.MembershipController.doChangeEmail(memberId: Long)
 POST        /membership/:memberId/make-owner        controllers.MembershipController.makeMemberAnOwner(memberId: Long)
 POST        /membership/:memberId/make-standard-member  controllers.MembershipController.makeMemberAStandardMember(memberId: Long)
+POST        /membership/:memberId/disconnect        controllers.MembershipController.disconnectMember(memberId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

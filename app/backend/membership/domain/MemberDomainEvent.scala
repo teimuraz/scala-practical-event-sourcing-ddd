@@ -17,6 +17,7 @@ object MemberDomainEvent {
       case MemberBecameAnOwner.eventType => implicitly[Reads[MemberBecameAnOwner]].map(identity)
       case MemberUnBecameAnOwner.eventType => implicitly[Reads[MemberUnBecameAnOwner]].map(identity)
       case MemberBecameAStandardMember.eventType => implicitly[Reads[MemberBecameAStandardMember]].map(identity)
+      case MemberDisconnected.eventType => implicitly[Reads[MemberDisconnected]].map(identity)
       case other => Reads(_ => JsError(s"Unknown event type $other"))
     }
   }
@@ -28,6 +29,7 @@ object MemberDomainEvent {
       case m: MemberBecameAnOwner => (Json.toJson(m)(MemberBecameAnOwner.format), MemberBecameAnOwner.eventType)
       case m: MemberUnBecameAnOwner => (Json.toJson(m)(MemberUnBecameAnOwner.format), MemberUnBecameAnOwner.eventType)
       case m: MemberBecameAStandardMember => (Json.toJson(m)(MemberBecameAStandardMember.format), MemberBecameAStandardMember.eventType)
+      case m: MemberDisconnected => (Json.toJson(m)(MemberDisconnected.format), MemberDisconnected.eventType)
     }
     jsValue.transform(__.json.update((__ \ 'eventType).json.put(JsString(eventType)))).get
   }
@@ -92,4 +94,13 @@ case class MemberUnBecameAnOwner(id: MemberId, role: MemberRole) extends MemberD
 object MemberUnBecameAnOwner {
   val eventType = "memberUnBecameAnOwner"
   implicit val format: OFormat[MemberUnBecameAnOwner] = Json.format[MemberUnBecameAnOwner]
+}
+
+case class MemberDisconnected(id: MemberId, role: MemberRole) extends MemberDomainEvent {
+  override def eventType: String = MemberDisconnected.eventType
+}
+
+object MemberDisconnected {
+  val eventType = "memberDisconnected"
+  implicit val format: OFormat[MemberDisconnected] = Json.format[MemberDisconnected]
 }

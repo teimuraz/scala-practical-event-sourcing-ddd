@@ -140,4 +140,8 @@ class MembershipController @Inject()
   def makeMemberAStandardMember(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
     membershipService.makeMemberAStandardMember(memberId).map(_ => Redirect(routes.MembershipController.view(memberId)))
   }
+
+  def disconnectMember(memberId: Long): Action[AnyContent] = messagesAction.async { implicit req =>
+    membershipService.disconnectMember(memberId).map(_ => Redirect(routes.MembershipController.index()))
+  }
 }

@@ -1,11 +1,12 @@
 package backend.membership.domain
 
-import backend.common.{Email, MemberRole, Owner, StandardMember}
+import backend.common._
 import library.error.{ForbiddenException, ValidationException}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
 import org.joda.time.DateTime
 import play.api.libs.json._
+
 import scala.util.Try
 
 // TODO:: Better to use ADT instead of role param
@@ -31,8 +32,8 @@ case class Member private(
   def becomeAnOwner(initiator: Member): Try[Member] = Try({
     initiator.role match {
       case Owner => role match {
-        case StandardMember => applyNewChange(MemberBecameAnOwner(id, Owner))
         case Owner => throw new ValidationException(s"Member $name is already an owner")
+        case _ => applyNewChange(MemberBecameAnOwner(id, Owner))
       }
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
     }
@@ -48,9 +49,30 @@ case class Member private(
               MemberUnBecameAnOwner(id, StandardMember)
             )
             applyNewChange(changes)
+          case FormerMember =>
+            applyNewChange(MemberBecameAStandardMember(id, StandardMember))
         case StandardMember => throw new ValidationException(s"Member ${name.value} is already a standard member")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as standard member")
+    }
+  })
+
+  def disconnect(initiator: Member): Try[Member] = Try({
+    initiator.role match {
+      case Owner =>
+        if (initiator.id == id) {
+          throw new ForbiddenException("Member cannot disconnect itself")
+        } else if (role == FormerMember){
+          throw new ForbiddenException("Member is already disconnected")
+        } else {
+          val changes = List(
+            Some(MemberDisconnected(id, FormerMember)),
+            if (role == Owner) Some(MemberUnBecameAnOwner(id, Owner)) else None
+          ).flatten
+          applyNewChange(changes)
+        }
+      case _ =>
+        throw new ForbiddenException("Only owner can disconnect another member")
     }
   })
 
@@ -69,6 +91,7 @@ case class Member private(
       case e: MemberBecameAnOwner => copy(role = e.role)
       case e: MemberUnBecameAnOwner => this // do nothing
       case e: MemberBecameAStandardMember => copy(role = e.role)
+      case e: MemberDisconnected => copy(role = FormerMember)
     }
   }
 

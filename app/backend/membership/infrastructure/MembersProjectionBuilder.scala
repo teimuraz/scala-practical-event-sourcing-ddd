@@ -23,6 +23,7 @@ class MembersProjectionBuilder @Inject()
       case e: MemberEmailChanged => handle(e)
       case e: MemberBecameAnOwner => handle(e)
       case e: MemberBecameAStandardMember => handle(e)
+      case e: MemberDisconnected => handle(e)
       case _ => ()
     }
   }
@@ -71,6 +72,14 @@ class MembersProjectionBuilder @Inject()
 
   private def handle(e: MemberBecameAStandardMember)(implicit rc: RepComponents) = {
     updateMemberRole(e.id, e.role)
+  }
+
+  private def handle(e: MemberDisconnected)(implicit rc: RepComponents) = {
+    updateMemberRole(e.id, e.role)
+    rc.dsl
+      .deleteFrom(MEMBERSHIP_MEMBERS)
+      .where(MEMBERSHIP_MEMBERS.ID.eq(e.id.value))
+      .execute()
   }
 
   private def updateMemberRole(memberId: MemberId, role: MemberRole)(implicit rc: RepComponents) = {

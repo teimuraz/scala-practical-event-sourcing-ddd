@@ -65,10 +65,8 @@ class MembershipServiceImpl @Inject()
             }
           }
         }
-      member <- memberFuture.map {
-        case Some(m) => m
-        case None => throw new ValidationException(s"Cannot change name of non-existing member (member id ${req.id})")
-      }
+      member <- memberFuture
+        .map(_.getOrElse(throw new ValidationException(s"Cannot change name of non-existing member (member id ${req.id})")))
       memberDto <- {
         val withChangedName = member.changeName(MemberName(req.name))
         transactionManager.execute { implicit rc =>
@@ -91,10 +89,8 @@ class MembershipServiceImpl @Inject()
           }
         }
       }
-      member <- memberFuture.map {
-        case Some(m) => m
-        case None => throw new ValidationException(s"Cannot change email of non-existing member (member id ${req.id})")
-      }
+      member <- memberFuture
+        .map(_.getOrElse(throw new ValidationException(s"Cannot change email of non-existing member (member id ${req.id})")))
       memberDto <- {
         val withChangedEmail = member.changeEmail(Email(req.email))
         transactionManager.execute { implicit rc =>
@@ -111,14 +107,10 @@ class MembershipServiceImpl @Inject()
     val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
     val standardMemberFuture = memberRepository.findById(MemberId(memberId))
     for {
-      initiator <- initiatorFuture.map {
-        case Some(owner) => owner
-        case None => throw new ValidationException(s"Initiator with id ${context.currentMemberId} not found")
-      }
-      standardMember <- standardMemberFuture.map {
-        case Some(member) => member
-        case None => throw new ValidationException(s"Cannot make non existing member an owner (member id: $memberId)")
-      }
+      initiator <- initiatorFuture
+        .map(_.getOrElse(throw new ValidationException(s"Initiator with id ${context.currentMemberId} not found")))
+      standardMember <- standardMemberFuture
+        .map(_.getOrElse(throw new ValidationException(s"Cannot make non existing member an owner (member id: $memberId)")))
       newOwnerDto <- {
         standardMember.becomeAnOwner(initiator) match {
           case Success(newOwner) =>
@@ -138,26 +130,45 @@ class MembershipServiceImpl @Inject()
     val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
     val targetOwnerFuture = memberRepository.findById(MemberId(memberId))
     for {
-      initiator <- initiatorFuture.map {
-        case Some(owner) => owner
-        case None => throw new ValidationException("Initiator with id ${context.currentMemberId} not found")
-      }
-      targetOwner <- targetOwnerFuture.map {
-        case Some(owner) => owner
-        case None => throw new ValidationException(s"Cannot make non existing member a standard member (member id: $memberId)")
-      }
+      initiator <- initiatorFuture
+        .map(_.getOrElse(throw new ValidationException(s"Initiator with id ${context.currentMemberId} not found")))
+      targetOwner <- targetOwnerFuture
+        .map(_.getOrElse(throw new ValidationException(s"Cannot make non existing member a standard member (member id: $memberId)")))
       standardMemberDto <- {
         targetOwner.becomeAStandardMember(initiator) match {
           case Success(standardMember) =>
             transactionManager.execute { implicit rc =>
               memberRepository.save(standardMember)
             }
-              .map(memberDomainToDto)
+            .map(memberDomainToDto)
           case Failure(e) => Future.failed(e)
         }
       }
     } yield {
       standardMemberDto
+    }
+  }
+
+  override def disconnectMember(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
+    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val targetMemberFuture = memberRepository.findById(MemberId(memberId))
+    for {
+      initiator <- initiatorFuture
+        .map(_.getOrElse(throw new ValidationException(s"Initiator with id ${context.currentMemberId} not found")))
+      targetMember: Member <- targetMemberFuture
+        .map(_.getOrElse(throw new ValidationException(s"Cannot disconnect non existing member (member id $memberId)")))
+      disconnectedMemberDto <- {
+        targetMember.disconnect(initiator) match {
+          case Success(disconnectedMember) =>
+            transactionManager.execute { implicit rc =>
+              memberRepository.save(disconnectedMember)
+            }
+            .map(memberDomainToDto)
+          case Failure(ex) => Future.failed(ex)
+        }
+      }
+    } yield {
+      disconnectedMemberDto
     }
   }
 

@@ -75,11 +75,13 @@ object Password extends StringValidatable[Password] {
 sealed trait MemberRole
 case object Owner extends MemberRole
 case object StandardMember extends MemberRole
+case object FormerMember extends MemberRole
 
 object MemberRole {
   def valueOf(value: Int): MemberRole = {
     value match {
       case 1 => StandardMember
+      case 99 => FormerMember
       case 100 => Owner
       case _ => throw new ValidationException(s"Not supported member role: $value")
     }
@@ -87,6 +89,7 @@ object MemberRole {
 
   def intValueOf(role: MemberRole): Int = role match {
     case StandardMember => 1
+    case FormerMember => 99
     case Owner => 100
   }
 

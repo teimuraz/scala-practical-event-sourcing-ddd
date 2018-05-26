@@ -35,13 +35,13 @@
                                     @if(member.role == StandardMember) {
                                         @helper.form(action = routes.MembershipController.makeMemberAnOwner(member.id)) {
                                             @CSRF.formField
-                                            <button type="submit">Make an owner</button>
+                                            <button type="submit" class="btn btn-link" style="padding-left: 0">Make an owner</button>
                                         }
                                     } else {
                                         @if(member.id != context.currentMemberId) {
                                             @helper.form(action = routes.MembershipController.makeMemberAStandardMember(member.id)) {
                                                 @CSRF.formField
-                                                <button type="submit">Make a standard member</button>
+                                                <button type="submit" class="btn btn-link" style="padding-left: 0">Make a standard member</button>
                                             }
                                         }
                                     }
@@ -55,6 +55,15 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="float-right">
+                @if(context.currentMemberRole == Owner && member.id != context.currentMemberId) {
+                    @helper.form(action = routes.MembershipController.disconnectMember(member.id)) {
+                        @CSRF.formField
+                        <button type="submit" class="btn btn-danger">Disconnect a member</button>
+                    }
+                }
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
 }
