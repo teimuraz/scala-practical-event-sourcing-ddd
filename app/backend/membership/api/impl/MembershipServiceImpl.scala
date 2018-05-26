@@ -1,9 +1,9 @@
 package backend.membership.api.impl
 
 import backend.auth.AuthContext
-import backend.common.types.Email
+import backend.common.types.{Email, MemberId, MemberName}
 import backend.membership.api._
-import backend.membership.domain.{Member, MemberId, MemberName, MemberRepository}
+import backend.membership.domain.{Member, MemberRepository}
 import javax.inject.{Inject, Singleton}
 import library.error.{ForbiddenException, NotFoundException, ValidationException}
 import library.jooq.TransactionManager

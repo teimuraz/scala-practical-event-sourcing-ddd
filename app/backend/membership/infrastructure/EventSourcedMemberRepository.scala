@@ -1,7 +1,8 @@
 package backend.membership.infrastructure
 
 import backend.common.AggregateTypeRegistry
-import backend.membership.domain.{Member, MemberDomainEvent, MemberId, MemberRepository}
+import backend.common.types.MemberId
+import backend.membership.domain.{Member, MemberDomainEvent, MemberRepository}
 import javax.inject
 import javax.inject.Inject
 import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
@@ -10,6 +11,7 @@ import library.messaging.Topic
 import library.repository.RepComponents
 import play.api.libs.json.{Reads, Writes}
 import backend.jooq.generated.Sequences.MEMBERSHIP_MEMBERS_SEQ
+
 import scala.concurrent.Future
 import backend.membership.domain.MemberDomainEventTopic
 

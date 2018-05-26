@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.types.Owner
+import backend.common.types.{MemberId, Owner}
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.error.InternalErrorException

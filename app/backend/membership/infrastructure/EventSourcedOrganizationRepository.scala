@@ -1,6 +1,7 @@
 package backend.membership.infrastructure
 
 import backend.common.AggregateTypeRegistry
+import backend.common.types.OrganizationId
 import backend.jooq.generated.Sequences.MEMBERSHIP_ORGANIZATIONS_SEQ
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}

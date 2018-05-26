@@ -1,5 +1,6 @@
 package backend.membership.domain
 
+import backend.common.types.{OrganizationId, OrganizationName}
 import library.error.ForbiddenException
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
@@ -41,21 +42,8 @@ object Organization {
   val empty: Organization = Organization(OrganizationId(0), OrganizationName("", validate = false), 0, AggregateRootInfo(Nil, 0))
 }
 
-/// Types
 
-case class OrganizationId(value: Long) extends AnyVal
 
-object OrganizationId {
-  implicit val reads: Reads[OrganizationId] = Reads.of[Long].map(OrganizationId(_))
-  implicit val writes: Writes[OrganizationId] = (o: OrganizationId) => JsNumber(o.value)
-}
 
-case class OrganizationName(value: String) extends AnyVal
 
-object OrganizationName extends StringValidatable[OrganizationName] {
-  override def notEmpty = Some(DefaultMessage)
-  override def inst = new OrganizationName(_)
-  implicit val reads: Reads[OrganizationName] = Reads.of[String].map(OrganizationName(_))
-  implicit val writes: Writes[OrganizationName] = (o: OrganizationName) => JsString(o.value)
-}
 

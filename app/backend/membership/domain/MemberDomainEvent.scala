@@ -1,6 +1,6 @@
 package backend.membership.domain
 
-import backend.common.types.{Email, MemberRole}
+import backend.common.types._
 import library.eventsourcing.DomainEvent
 import org.joda.time.DateTime
 import play.api.libs.json._

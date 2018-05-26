@@ -1,5 +1,6 @@
 package backend.membership.infrastructure
 
+import backend.common.types.OrganizationId
 import backend.jooq.generated.Tables.MEMBERSHIP_ORGANIZATIONS
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}

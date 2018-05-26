@@ -108,22 +108,12 @@ object Member {
   val empty: Member = Member(MemberId(0), MemberName("", validate = false), Email("", validate = false), StandardMember, OrganizationId(0), DateTime.now, AggregateRootInfo(Nil, 0))
 }
 
-/// Types
 
-case class MemberId(value: Long) extends AnyVal
 
-object MemberId {
-  implicit val reads: Reads[MemberId] = Reads.of[Long].map(MemberId(_))
-  implicit val writes: Writes[MemberId] = (o: MemberId) => JsNumber(o.value)
-}
 
-case class MemberName private(value: String) extends AnyVal
 
-object MemberName extends StringValidatable[MemberName] {
-  override def notEmpty = Some(DefaultMessage)
-  override def inst = new MemberName(_)
-  implicit val reads: Reads[MemberName] = Reads.of[String].map(MemberName(_))
-  implicit val writes: Writes[MemberName] = (o: MemberName) => JsString(o.value)
-}
+
+
+
 
 

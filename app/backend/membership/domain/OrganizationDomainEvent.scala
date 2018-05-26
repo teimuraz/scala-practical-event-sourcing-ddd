@@ -1,5 +1,6 @@
 package backend.membership.domain
 
+import backend.common.types.{OrganizationId, OrganizationName}
 import library.eventsourcing.DomainEvent
 import play.api.libs.json._
 

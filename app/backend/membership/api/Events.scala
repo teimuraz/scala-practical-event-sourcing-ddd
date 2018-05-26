@@ -1,7 +1,6 @@
 package backend.membership.api
 
-import backend.common.types.{Email, MemberRole}
-import backend.membership.domain.{MemberId, MemberName}
+import backend.common.types.{Email, MemberId, MemberName, MemberRole}
 import org.joda.time.DateTime
 
 trait MemberApiEvent
