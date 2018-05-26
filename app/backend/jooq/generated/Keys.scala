@@ -7,10 +7,12 @@ package backend.jooq.generated
 import backend.jooq.generated.tables.AggregateVersions
 import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
+import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
 import backend.jooq.generated.tables.records.AggregateVersionsRecord
 import backend.jooq.generated.tables.records.EventsJournalRecord
 import backend.jooq.generated.tables.records.MembershipMembersRecord
+import backend.jooq.generated.tables.records.MembershipOrganizationsRecord
 import backend.jooq.generated.tables.records.PlayEvolutionsRecord
 
 import java.lang.Long
@@ -49,7 +51,8 @@ object Keys {
 
   val AGGREGATE_VERSIONS_PK = UniqueKeys0.AGGREGATE_VERSIONS_PK
   val EVENTS_JOURNAL_PK = UniqueKeys0.EVENTS_JOURNAL_PK
-  val PENDING_USERS_PKEY = UniqueKeys0.PENDING_USERS_PKEY
+  val MEMBERSHIP_MEMBERS_PKEY = UniqueKeys0.MEMBERSHIP_MEMBERS_PKEY
+  val MEMBERSHIP_ORGANIZATIONS_PKEY = UniqueKeys0.MEMBERSHIP_ORGANIZATIONS_PKEY
   val PLAY_EVOLUTIONS_PKEY = UniqueKeys0.PLAY_EVOLUTIONS_PKEY
 
   // -------------------------------------------------------------------------
@@ -68,7 +71,8 @@ object Keys {
   private object UniqueKeys0 {
     val AGGREGATE_VERSIONS_PK : UniqueKey[AggregateVersionsRecord] = Internal.createUniqueKey(AggregateVersions.AGGREGATE_VERSIONS, "aggregate_versions_pk", AggregateVersions.AGGREGATE_VERSIONS.AGGREGATE_ROOT_TYPE, AggregateVersions.AGGREGATE_VERSIONS.AGGREGATE_ROOT_ID)
     val EVENTS_JOURNAL_PK : UniqueKey[EventsJournalRecord] = Internal.createUniqueKey(EventsJournal.EVENTS_JOURNAL, "events_journal_pk", EventsJournal.EVENTS_JOURNAL.EVENT_OFFSET)
-    val PENDING_USERS_PKEY : UniqueKey[MembershipMembersRecord] = Internal.createUniqueKey(MembershipMembers.MEMBERSHIP_MEMBERS, "pending_users_pkey", MembershipMembers.MEMBERSHIP_MEMBERS.ID)
+    val MEMBERSHIP_MEMBERS_PKEY : UniqueKey[MembershipMembersRecord] = Internal.createUniqueKey(MembershipMembers.MEMBERSHIP_MEMBERS, "membership_members_pkey", MembershipMembers.MEMBERSHIP_MEMBERS.ID)
+    val MEMBERSHIP_ORGANIZATIONS_PKEY : UniqueKey[MembershipOrganizationsRecord] = Internal.createUniqueKey(MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS, "membership_organizations_pkey", MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS.ID)
     val PLAY_EVOLUTIONS_PKEY : UniqueKey[PlayEvolutionsRecord] = Internal.createUniqueKey(PlayEvolutions.PLAY_EVOLUTIONS, "play_evolutions_pkey", PlayEvolutions.PLAY_EVOLUTIONS.ID)
   }
 }

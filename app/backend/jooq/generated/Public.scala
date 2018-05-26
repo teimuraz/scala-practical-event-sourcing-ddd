@@ -7,6 +7,7 @@ package backend.jooq.generated
 import backend.jooq.generated.tables.AggregateVersions
 import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
+import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
 
 import java.util.ArrayList
@@ -54,7 +55,8 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
   private def getSequences0(): List[Sequence[_]] = {
     return Arrays.asList[Sequence[_]](
       Sequences.EVENTS_JOURNAL_EVENT_OFFSET_SEQ,
-      Sequences.MEMBERSHIP_MEMBERS_SEQ)
+      Sequences.MEMBERSHIP_MEMBERS_SEQ,
+      Sequences.MEMBERSHIP_ORGANIZATIONS_SEQ)
   }
 
   override def getTables : List[Table[_]] = {
@@ -68,6 +70,7 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
       AggregateVersions.AGGREGATE_VERSIONS,
       EventsJournal.EVENTS_JOURNAL,
       MembershipMembers.MEMBERSHIP_MEMBERS,
+      MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS,
       PlayEvolutions.PLAY_EVOLUTIONS)
   }
 }

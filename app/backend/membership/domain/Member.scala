@@ -15,6 +15,7 @@ case class Member private(
     name: MemberName,
     email: Email,
     role: MemberRole,
+    organizationId: OrganizationId,
     becameMemberAt: DateTime,
     aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
 ) extends AggregateRoot[Member, MemberId, MemberDomainEvent] {
@@ -30,7 +31,7 @@ case class Member private(
   def becomeAnOwner(initiator: Member): Try[Member] = Try({
     initiator.role match {
       case Owner => role match {
-        case StandardMember => applyChange(MemberRoleChanged(id, Owner))
+        case StandardMember => applyChange(MemberBecameAnOwner(id, Owner))
         case Owner => throw new ValidationException(s"Member $name is already an owner")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as owners")
@@ -40,7 +41,7 @@ case class Member private(
   def becomeAStandardMember(initiator: Member): Try[Member] = Try({
     initiator.role match {
       case Owner => role match {
-        case StandardMember => applyChange(MemberRoleChanged(id, StandardMember))
+        case StandardMember => applyChange(MemberBecameAnOwner(id, StandardMember))
         case Owner => throw new ValidationException(s"Member $name is already a standard member")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as standard member")
@@ -49,17 +50,17 @@ case class Member private(
 
   def createNewMember(id: MemberId, name: MemberName, email: Email): Try[Member] = Try({
     role match {
-      case Owner => Member.create(id, name, email, StandardMember, DateTime.now())
+      case Owner => Member.create(id, name, email, StandardMember, organizationId, DateTime.now())
       case _ => throw new ForbiddenException("Only owner can create new members")
     }
   })
 
   override def applyEvent(event: MemberDomainEvent): Member = {
     event match {
-      case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.becameMemberAt, aggregateRootInfo)
+      case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.organizationId, e.becameMemberAt, aggregateRootInfo)
       case e: MemberNameChanged => copy(name = e.name)
       case e: MemberEmailChanged => copy(email = e.email)
-      case e: MemberRoleChanged => copy(role = e.role)
+      case e: MemberBecameAnOwner => copy(role = e.role)
     }
   }
 
@@ -68,12 +69,12 @@ case class Member private(
 }
 
 object Member {
-  def create(id: MemberId, name: MemberName, email: Email, role: MemberRole, becameMemberAt: DateTime): Member = {
-    val events = List(MemberCreated(id, name, email, role, becameMemberAt))
-    Member(id, name, email, role, becameMemberAt, AggregateRootInfo(events, 0))
+  def create(id: MemberId, name: MemberName, email: Email, role: MemberRole, organizationId: OrganizationId, becameMemberAt: DateTime): Member = {
+    val events = List(MemberCreated(id, name, email, role, organizationId, becameMemberAt))
+    Member(id, name, email, role, organizationId, becameMemberAt, AggregateRootInfo(events, 0))
   }
 
-  val empty: Member = Member(MemberId(0), MemberName("", validate = false), Email("", validate = false), StandardMember, DateTime.now, AggregateRootInfo(Nil, 0))
+  val empty: Member = Member(MemberId(0), MemberName("", validate = false), Email("", validate = false), StandardMember, OrganizationId(0), DateTime.now, AggregateRootInfo(Nil, 0))
 }
 
 /// Types

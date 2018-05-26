@@ -37,6 +37,11 @@ object Tables {
   val MEMBERSHIP_MEMBERS = backend.jooq.generated.tables.MembershipMembers.MEMBERSHIP_MEMBERS
 
   /**
+   * The table <code>public.membership_organizations</code>.
+   */
+  val MEMBERSHIP_ORGANIZATIONS = backend.jooq.generated.tables.MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS
+
+  /**
    * The table <code>public.play_evolutions</code>.
    */
   val PLAY_EVOLUTIONS = backend.jooq.generated.tables.PlayEvolutions.PLAY_EVOLUTIONS

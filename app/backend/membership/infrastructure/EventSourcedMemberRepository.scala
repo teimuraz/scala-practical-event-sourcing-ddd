@@ -16,7 +16,7 @@ import backend.membership.domain.MemberDomainEventTopic
 @inject.Singleton
 class EventSourcedMemberRepository @Inject()
     (val db: Db, memberDomainEventTopic: MemberDomainEventTopic)
-  extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberDomainEvent]  {
+  extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberDomainEvent] {
 
   override def topic: Option[Topic[MemberDomainEvent, RepComponents]] = Some(memberDomainEventTopic)
 

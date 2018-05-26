@@ -1,7 +1,7 @@
 import backend.membership.api.{MemberTopic, MembershipService}
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
-import backend.membership.domain.{MemberDomainEventTopic, MemberRepository}
-import backend.membership.infrastructure.{EventSourcedMemberRepository, MembersProjectionBuilder, Seeder}
+import backend.membership.domain.{MemberDomainEventTopic, MemberRepository, OrganizationRepository}
+import backend.membership.infrastructure._
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.{Db, TransactionManager}
 import library.security.{BCryptPasswordEncoder, PasswordEncoder}
@@ -26,12 +26,15 @@ class Module extends AbstractModule with AkkaGuiceSupport {
 
     bind(classOf[MembershipService]).to(classOf[MembershipServiceImpl])
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
-//    bind(classOf[MemberDomainEventTopic]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
     bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
+
+    bind(classOf[OrganizationRepository]).to(classOf[EventSourcedOrganizationRepository])
+    bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()
+    bind(classOf[OrganizationOwnersCountUpdater]).asEagerSingleton()
+
     bind(classOf[TransactionManager])
     bind(classOf[Seeder]).asEagerSingleton()
-
 
   }
 }

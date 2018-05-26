@@ -31,8 +31,8 @@ class Db @Inject()(val database: Database, system: ActorSystem, lifecycle: Appli
   }(databaseContext)
 
   def querySync[A](block: DSLContext => A): A = {
-    database.withConnection { connnection: Connection =>
-      val dsl = DSL.using(connnection, SQLDialect.POSTGRES_9_4)
+    database.withConnection { connection: Connection =>
+      val dsl = DSL.using(connection, SQLDialect.POSTGRES_9_4)
       block(dsl)
     }
   }

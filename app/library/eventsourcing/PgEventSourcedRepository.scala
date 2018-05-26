@@ -27,34 +27,38 @@ trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: Do
   implicit def reads: Reads[Event]
 
   override def findById(id: ID): Future[Option[E]] = {
-
-    import scala.collection.JavaConverters._
-
     db.query { dsl =>
-      val eventRecords = dsl
-        .selectFrom(EVENTS_JOURNAL)
-        .where(
-          EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE.eq(aggregateRootType.value)
-            // let's assume that all ids
+      doFindById(id, dsl)
+    }
+  }
+
+  override def findByIdSync(id: ID)(implicit rc: RepComponents): Option[E] = doFindById(id, rc.dsl)
+
+  private def doFindById(id: ID, dsl: DSLContext): Option[E] = {
+    import scala.collection.JavaConverters._
+    val eventRecords = dsl
+      .selectFrom(EVENTS_JOURNAL)
+      .where(
+        EVENTS_JOURNAL.AGGREGATE_ROOT_TYPE.eq(aggregateRootType.value)
+          // let's assume that all ids
           .and(EVENTS_JOURNAL.AGGREGATE_ROOT_ID.eq(idAsLong(id)))
-        )
-        .orderBy(EVENTS_JOURNAL.EVENT_OFFSET)
-        .fetchInto(classOf[EventsJournalRecord])
-        .asScala
+      )
+      .orderBy(EVENTS_JOURNAL.EVENT_OFFSET)
+      .fetchInto(classOf[EventsJournalRecord])
+      .asScala
 
-      if (eventRecords.isEmpty) {
-        None
-      } else {
-        val aggregateRoot: E = eventRecords
-          .foldLeft(emptyState) { (state, record) =>
-            val eventRaw = Json.parse(record.getEvent.toString)
-            val event = eventRaw.as[Event]
-            state.applyEvent(event)
-          }
+    if (eventRecords.isEmpty) {
+      None
+    } else {
+      val aggregateRoot: E = eventRecords
+        .foldLeft(emptyState) { (state, record) =>
+          val eventRaw = Json.parse(record.getEvent.toString)
+          val event = eventRaw.as[Event]
+          state.applyEvent(event)
+        }
 
-        val withVersion = aggregateRoot.copyWithInfo(info = AggregateRootInfo(Nil, eventRecords.last.getAggregateVersion))
-        Some(withVersion)
-      }
+      val withVersion = aggregateRoot.copyWithInfo(info = AggregateRootInfo(Nil, eventRecords.last.getAggregateVersion))
+      Some(withVersion)
     }
   }
 

@@ -82,6 +82,11 @@ class MembershipMembers(alias : Name, aliased : Table[MembershipMembersRecord], 
   val ROLE : TableField[MembershipMembersRecord, Integer] = createField("role", org.jooq.impl.SQLDataType.INTEGER.nullable(false), "")
 
   /**
+   * The column <code>public.membership_members.organization_id</code>.
+   */
+  val ORGANIZATION_ID : TableField[MembershipMembersRecord, Long] = createField("organization_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), "")
+
+  /**
    * The column <code>public.membership_members.became_member_at</code>.
    */
   val BECAME_MEMBER_AT : TableField[MembershipMembersRecord, DateTime] = createField("became_member_at", org.jooq.impl.SQLDataType.TIMESTAMP, "", new JodaDateTimeConverter())
@@ -114,15 +119,15 @@ class MembershipMembers(alias : Name, aliased : Table[MembershipMembersRecord], 
   override def getSchema : Schema = Public.PUBLIC
 
   override def getIndexes : List[ Index ] = {
-    return Arrays.asList[ Index ](Indexes.MEMBERSHIP_MEMBERS_EMAIL_IDX, Indexes.MEMBERSHIP_MEMBERS_NAME_IDX, Indexes.PENDING_USERS_PKEY)
+    return Arrays.asList[ Index ](Indexes.MEMBERSHIP_MEMBERS_EMAIL_IDX, Indexes.MEMBERSHIP_MEMBERS_NAME_IDX, Indexes.MEMBERSHIP_MEMBERS_ORGANIZATION_ID_IDX, Indexes.MEMBERSHIP_MEMBERS_PKEY)
   }
 
   override def getPrimaryKey : UniqueKey[MembershipMembersRecord] = {
-    Keys.PENDING_USERS_PKEY
+    Keys.MEMBERSHIP_MEMBERS_PKEY
   }
 
   override def getKeys : List[ UniqueKey[MembershipMembersRecord] ] = {
-    return Arrays.asList[ UniqueKey[MembershipMembersRecord] ](Keys.PENDING_USERS_PKEY)
+    return Arrays.asList[ UniqueKey[MembershipMembersRecord] ](Keys.MEMBERSHIP_MEMBERS_PKEY)
   }
 
   override def as(alias : String) : MembershipMembers = {

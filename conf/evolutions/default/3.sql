@@ -8,8 +8,9 @@ CREATE TABLE public.membership_members
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     email character varying(100) COLLATE pg_catalog."default" NOT NULL,
     role integer NOT NULL,
+    organization_id bigint NOT NULL,
     became_member_at timestamp without time zone,
-    CONSTRAINT pending_users_pkey PRIMARY KEY (id)
+    CONSTRAINT membership_members_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -27,8 +28,19 @@ CREATE INDEX membership_members_email_idx
     (email COLLATE pg_catalog."default")
     TABLESPACE pg_default;
 
+CREATE INDEX membership_members_organization_id_idx
+    ON public.membership_members USING btree
+    (organization_id)
+    TABLESPACE pg_default;
+
+CREATE SEQUENCE public.membership_members_seq
+NO MINVALUE
+NO MAXVALUE;
+
 
 # --- !Downs
+
+DROP SEQUENCE membership_members_seq;
 
 DROP TABLE IF EXISTS public.membership_members CASCADE;
 

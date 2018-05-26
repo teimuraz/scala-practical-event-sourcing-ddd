@@ -7,6 +7,7 @@ package backend.jooq.generated
 import backend.jooq.generated.tables.AggregateVersions
 import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
+import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
 
 import javax.annotation.Generated
@@ -40,7 +41,9 @@ object Indexes {
   val EVENTS_JOURNAL_PK = Indexes0.EVENTS_JOURNAL_PK
   val MEMBERSHIP_MEMBERS_EMAIL_IDX = Indexes0.MEMBERSHIP_MEMBERS_EMAIL_IDX
   val MEMBERSHIP_MEMBERS_NAME_IDX = Indexes0.MEMBERSHIP_MEMBERS_NAME_IDX
-  val PENDING_USERS_PKEY = Indexes0.PENDING_USERS_PKEY
+  val MEMBERSHIP_MEMBERS_ORGANIZATION_ID_IDX = Indexes0.MEMBERSHIP_MEMBERS_ORGANIZATION_ID_IDX
+  val MEMBERSHIP_MEMBERS_PKEY = Indexes0.MEMBERSHIP_MEMBERS_PKEY
+  val MEMBERSHIP_ORGANIZATIONS_PKEY = Indexes0.MEMBERSHIP_ORGANIZATIONS_PKEY
   val PLAY_EVOLUTIONS_PKEY = Indexes0.PLAY_EVOLUTIONS_PKEY
 
   // -------------------------------------------------------------------------
@@ -54,7 +57,9 @@ object Indexes {
     val EVENTS_JOURNAL_PK : Index = Internal.createIndex("events_journal_pk", EventsJournal.EVENTS_JOURNAL, Array[OrderField [_] ](EventsJournal.EVENTS_JOURNAL.EVENT_OFFSET), true)
     val MEMBERSHIP_MEMBERS_EMAIL_IDX : Index = Internal.createIndex("membership_members_email_idx", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.EMAIL), false)
     val MEMBERSHIP_MEMBERS_NAME_IDX : Index = Internal.createIndex("membership_members_name_idx", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.NAME), false)
-    val PENDING_USERS_PKEY : Index = Internal.createIndex("pending_users_pkey", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.ID), true)
+    val MEMBERSHIP_MEMBERS_ORGANIZATION_ID_IDX : Index = Internal.createIndex("membership_members_organization_id_idx", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.ORGANIZATION_ID), false)
+    val MEMBERSHIP_MEMBERS_PKEY : Index = Internal.createIndex("membership_members_pkey", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.ID), true)
+    val MEMBERSHIP_ORGANIZATIONS_PKEY : Index = Internal.createIndex("membership_organizations_pkey", MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS, Array[OrderField [_] ](MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS.ID), true)
     val PLAY_EVOLUTIONS_PKEY : Index = Internal.createIndex("play_evolutions_pkey", PlayEvolutions.PLAY_EVOLUTIONS, Array[OrderField [_] ](PlayEvolutions.PLAY_EVOLUTIONS.ID), true)
   }
 }

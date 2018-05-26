@@ -21,7 +21,8 @@ class MembersProjectionBuilder @Inject()
       case e: MemberCreated => handle(e)
       case e: MemberNameChanged => handle(e)
       case e: MemberEmailChanged => handle(e)
-      case e: MemberRoleChanged => handle(e)
+      case e: MemberBecameAnOwner => handle(e)
+      case _ => ()
     }
   }
 
@@ -33,6 +34,7 @@ class MembersProjectionBuilder @Inject()
         MEMBERSHIP_MEMBERS.NAME,
         MEMBERSHIP_MEMBERS.EMAIL,
         MEMBERSHIP_MEMBERS.ROLE,
+        MEMBERSHIP_MEMBERS.ORGANIZATION_ID,
         MEMBERSHIP_MEMBERS.BECAME_MEMBER_AT
       )
       .values(
@@ -40,6 +42,7 @@ class MembersProjectionBuilder @Inject()
         e.name.value,
         e.email.value,
         MemberRole.intValueOf(e.role),
+        e.organizationId.value,
         e.becameMemberAt
       )
       .execute()
@@ -61,7 +64,7 @@ class MembersProjectionBuilder @Inject()
       .execute()
   }
 
-  private def handle(e: MemberRoleChanged)(implicit rc: RepComponents) = {
+  private def handle(e: MemberBecameAnOwner)(implicit rc: RepComponents) = {
     rc.dsl
       .update(MEMBERSHIP_MEMBERS)
       .set(MEMBERSHIP_MEMBERS.ROLE, new Integer(MemberRole.intValueOf(e.role)))

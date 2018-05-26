@@ -14,7 +14,7 @@ object MemberDomainEvent {
       case MemberCreated.eventType => implicitly[Reads[MemberCreated]].map(identity)
       case MemberNameChanged.eventType => implicitly[Reads[MemberNameChanged]].map(identity)
       case MemberEmailChanged.eventType => implicitly[Reads[MemberEmailChanged]].map(identity)
-      case MemberRoleChanged.eventType => implicitly[Reads[MemberRoleChanged]].map(identity)
+      case MemberBecameAnOwner.eventType => implicitly[Reads[MemberBecameAnOwner]].map(identity)
       case other => Reads(_ => JsError(s"Unknown event type $other"))
     }
   }
@@ -23,7 +23,7 @@ object MemberDomainEvent {
       case m: MemberCreated => (Json.toJson(m)(MemberCreated.format), MemberCreated.eventType)
       case m: MemberNameChanged => (Json.toJson(m)(MemberNameChanged.format), MemberNameChanged.eventType)
       case m: MemberEmailChanged => (Json.toJson(m)(MemberEmailChanged.format), MemberEmailChanged.eventType)
-      case m: MemberRoleChanged => (Json.toJson(m)(MemberRoleChanged.format), MemberEmailChanged.eventType)
+      case m: MemberBecameAnOwner => (Json.toJson(m)(MemberBecameAnOwner.format), MemberEmailChanged.eventType)
     }
     jsValue.transform(__.json.update((__ \ 'eventType).json.put(JsString(eventType)))).get
   }
@@ -34,6 +34,7 @@ case class MemberCreated(
     name: MemberName,
     email: Email,
     role: MemberRole,
+    organizationId: OrganizationId,
     becameMemberAt: DateTime
 ) extends MemberDomainEvent {
   override def eventType: String = MemberCreated.eventType
@@ -62,11 +63,20 @@ object MemberEmailChanged {
   implicit val format: OFormat[MemberEmailChanged] = Json.format[MemberEmailChanged]
 }
 
-case class MemberRoleChanged(id: MemberId, role: MemberRole) extends MemberDomainEvent {
-  override def eventType: String = MemberRoleChanged.eventType
+case class MemberBecameAnOwner(id: MemberId, role: MemberRole) extends MemberDomainEvent {
+  override def eventType: String = MemberBecameAnOwner.eventType
 }
 
-object MemberRoleChanged {
-  val eventType = "memberRoleChanged"
-  implicit val format: OFormat[MemberRoleChanged] = Json.format[MemberRoleChanged]
+object MemberBecameAnOwner {
+  val eventType = "memberBecameAnOwner"
+  implicit val format: OFormat[MemberBecameAnOwner] = Json.format[MemberBecameAnOwner]
+}
+
+case class MemberBecameAStandardMember(id: MemberId, role: MemberRole) extends MemberDomainEvent {
+  override def eventType: String = MemberBecameAStandardMember.eventType
+}
+
+object MemberBecameAStandardMember {
+  val eventType = "memberBecameAStandardMember"
+  implicit val format: OFormat[MemberBecameAStandardMember] = Json.format[MemberBecameAStandardMember]
 }
