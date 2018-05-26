@@ -23,7 +23,7 @@ object MemberDomainEvent {
       case m: MemberCreated => (Json.toJson(m)(MemberCreated.format), MemberCreated.eventType)
       case m: MemberNameChanged => (Json.toJson(m)(MemberNameChanged.format), MemberNameChanged.eventType)
       case m: MemberEmailChanged => (Json.toJson(m)(MemberEmailChanged.format), MemberEmailChanged.eventType)
-      case m: MemberBecameAnOwner => (Json.toJson(m)(MemberBecameAnOwner.format), MemberEmailChanged.eventType)
+      case m: MemberBecameAnOwner => (Json.toJson(m)(MemberBecameAnOwner.format), MemberBecameAnOwner.eventType)
     }
     jsValue.transform(__.json.update((__ \ 'eventType).json.put(JsString(eventType)))).get
   }

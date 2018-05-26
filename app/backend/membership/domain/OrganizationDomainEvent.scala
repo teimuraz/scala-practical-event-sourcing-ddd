@@ -48,6 +48,6 @@ case class OwnersCountDecreased(id: OrganizationId, totalOwnersCount: Int) exten
 
 object OwnersCountDecreased {
   implicit val format: OFormat[OwnersCountDecreased] = Json.format[OwnersCountDecreased]
-  val eventType = "ownersCountDecreassed"
+  val eventType = "ownersCountDecreased"
 }
 

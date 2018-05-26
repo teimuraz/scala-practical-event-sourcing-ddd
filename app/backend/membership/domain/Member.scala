@@ -41,7 +41,7 @@ case class Member private(
   def becomeAStandardMember(initiator: Member): Try[Member] = Try({
     initiator.role match {
       case Owner => role match {
-        case StandardMember => applyChange(MemberBecameAnOwner(id, StandardMember))
+        case StandardMember => applyChange(MemberBecameAStandardMember(id, StandardMember))
         case Owner => throw new ValidationException(s"Member $name is already a standard member")
       }
       case _ => throw new ForbiddenException("Only owner can make another members as standard member")
