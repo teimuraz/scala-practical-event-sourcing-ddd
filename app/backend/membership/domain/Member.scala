@@ -35,7 +35,7 @@ case class Member private(
         case Owner => throw new ValidationException(s"Member $name is already an owner")
         case _ => applyNewChange(MemberBecameAnOwner(id, Owner))
       }
-      case _ => throw new ForbiddenException("Only owner can make another members as owners")
+      case _ => throw new ForbiddenException("Only owner can make another members an owner")
     }
   })
 
