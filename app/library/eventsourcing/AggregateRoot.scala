@@ -1,14 +1,14 @@
 package library.eventsourcing
 
 
-trait DomainEvent
+trait AggregateRootEvent
 
-case class AggregateRootInfo[Event <: DomainEvent](uncommittedEvents: List[Event], version: Int)
+case class AggregateRootInfo[Event <: AggregateRootEvent](uncommittedEvents: List[Event], version: Int)
 
 object AggregateRootInfo {
 }
 
-trait AggregateRoot[E <: AggregateRoot[E, ID, Event], ID, Event <: DomainEvent] {
+trait AggregateRoot[E <: AggregateRoot[E, ID, Event], ID, Event <: AggregateRootEvent] {
 
   def id: ID
 

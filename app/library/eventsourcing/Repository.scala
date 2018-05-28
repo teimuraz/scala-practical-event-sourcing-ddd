@@ -5,7 +5,7 @@ import library.jooq.Transaction.TransactionBoundary
 
 import scala.concurrent.Future
 
-trait Repository[E <: AggregateRoot[E, ID, Event], ID, Event <: DomainEvent] {
+trait Repository[E <: AggregateRoot[E, ID, Event], ID, Event <: AggregateRootEvent] {
   def findById(id: ID): Future[Option[E]]
   def findByIdSync(id: ID)(implicit rc: RepComponents): Option[E]
 

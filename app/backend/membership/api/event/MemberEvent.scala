@@ -2,12 +2,14 @@ package backend.membership.api.event
 
 import backend.common.types._
 import julienrf.json.derived.flat
-import library.eventsourcing.DomainEvent
+import library.eventsourcing.AggregateRootEvent
 import library.joda.json.jsonDateTimeFormat
 import org.joda.time.DateTime
 import play.api.libs.json._
 
-sealed trait MemberEvent extends DomainEvent
+sealed trait MemberEvent extends AggregateRootEvent {
+  def id: MemberId
+}
 
 case class MemberCreated(
     id: MemberId,

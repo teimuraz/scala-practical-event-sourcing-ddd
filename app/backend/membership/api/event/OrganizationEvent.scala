@@ -2,10 +2,10 @@ package backend.membership.api.event
 
 import backend.common.types.{OrganizationId, OrganizationName}
 import julienrf.json.derived.flat
-import library.eventsourcing.DomainEvent
+import library.eventsourcing.AggregateRootEvent
 import play.api.libs.json._
 
-sealed trait OrganizationEvent extends DomainEvent
+sealed trait OrganizationEvent extends AggregateRootEvent
 
 case class OrganizationCreated(id: OrganizationId, name: OrganizationName) extends OrganizationEvent
 object OrganizationCreated {

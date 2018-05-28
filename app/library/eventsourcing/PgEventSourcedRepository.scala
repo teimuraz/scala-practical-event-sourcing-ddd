@@ -16,7 +16,7 @@ import play.api.Logger
 
 case class AggregateRootType(value: Int) extends AnyVal
 
-trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: DomainEvent] extends Repository[E, ID, Event] with JooqRepositorySupport {
+trait PgEventSourcedRepository[E <: AggregateRoot[E, ID, Event], ID, Event <: AggregateRootEvent] extends Repository[E, ID, Event] with JooqRepositorySupport {
 
   def aggregateRootType: AggregateRootType
   def emptyState: E

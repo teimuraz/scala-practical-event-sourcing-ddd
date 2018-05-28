@@ -8,6 +8,7 @@ import library.repository.RepComponents
 import backend.membership.api.{event => membershipApiEvent}
 import backend.tracker.domain._
 import library.error.InternalErrorException
+import shapeless.Generic
 
 /**
  * Subscribe to membership bounded contexts events
@@ -21,6 +22,13 @@ class MembershipMemberApiEventsConsumer @Inject()
   override def topic: Topic[membershipApiEvent.MemberEvent, RepComponents] = membershipMemberEventTopic
 
   override def handle(message: membershipApiEvent.MemberEvent)(implicit additionalData: RepComponents): Unit = {
+
+    def updateTrackerMember(event: MemberDomainEvent) = {
+      val member = getMember(event.id)
+      member.applyNewChange(event)
+      memberRepository.save(member)
+    }
+
     message match {
       case e: membershipApiEvent.MemberCreated =>
         val member = Member(
@@ -32,23 +40,23 @@ class MembershipMemberApiEventsConsumer @Inject()
           becameMemberAt = e.becameMemberAt
         )
         memberRepository.save(member)
-
-      case e: membershipApiEvent.MemberEmailChanged =>
-        val member = getMember(e.id)
-        member.applyNewChange(MemberEmailChanged(e.id, e.email))
-        memberRepository.save(member)
-
-      case e: membershipApiEvent.MemberNameChanged =>
-        val member = getMember(e.id)
-        member.applyNewChange(MemberNameChanged(e.id, e.name))
-        memberRepository.save(member)
-
-      case e: membershipApiEvent.MemberDisconnected =>
-        val member = getMember(e.id)
-        member.applyNewChange(MemberDisconnected(e.id, e.role))
-        memberRepository.save(member)
-
-
+      case e =>
+        val trackerEvent = e match {
+            // TODO:: Use shapeless?
+          case e: membershipApiEvent.MemberEmailChanged =>
+            MemberEmailChanged(e.id, e.email)
+          case e:membershipApiEvent.MemberNameChanged =>
+            MemberNameChanged(e.id, e.name)
+          case e: membershipApiEvent.MemberBecameAnOwner =>
+            MemberBecameAnOwner(e.id, e.role)
+          case e: membershipApiEvent.MemberBecameAStandardMember =>
+            MemberBecameAStandardMember(e.id, e.role)
+          case e: membershipApiEvent.MemberUnBecameAnOwner =>
+            MemberUnBecameAnOwner(e.id, e.role)
+          case e: membershipApiEvent.MemberDisconnected =>
+            MemberDisconnected(e.id, e.role)
+        }
+        updateTrackerMember(trackerEvent)
     }
   }
 

@@ -2,6 +2,7 @@ import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
 import backend.membership.domain.{MemberRepository, OrganizationRepository}
 import backend.membership.infrastructure._
+import backend.tracker.infrastructure.MembershipMemberApiEventsConsumer
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.{Db, TransactionManager}
 import library.security.{BCryptPasswordEncoder, PasswordEncoder}
@@ -24,17 +25,30 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[PasswordEncoder]).to(classOf[BCryptPasswordEncoder])
     bind(classOf[Db])
 
+    bind(classOf[TransactionManager])
+
+
+    // Membership bounded context
+
     bind(classOf[MembershipService]).to(classOf[MembershipServiceImpl])
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
-    bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
+    bind(classOf[backend.membership.domain.MemberRepository]).to(classOf[backend.membership.infrastructure.EventSourcedMemberRepository])
 
     bind(classOf[OrganizationRepository]).to(classOf[EventSourcedOrganizationRepository])
     bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()
     bind(classOf[OrganizationOwnersCountUpdater]).asEagerSingleton()
 
-    bind(classOf[TransactionManager])
+
+    // Tracker bounded context
+
+    bind(classOf[MembershipMemberApiEventsConsumer]).asEagerSingleton()
+    bind(classOf[backend.tracker.domain.MemberRepository]).to(classOf[backend.tracker.infrastructure.EventSourcedMemberRepository])
+
+    // Bind seeders after all bounded contexts, since they should be loaded after all event listeners were bound.
+
     bind(classOf[Seeder]).asEagerSingleton()
+
 
   }
 }

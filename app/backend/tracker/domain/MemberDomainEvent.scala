@@ -2,12 +2,14 @@ package backend.tracker.domain
 
 import backend.common.types._
 import julienrf.json.derived.flat
-import library.eventsourcing.DomainEvent
+import library.eventsourcing.AggregateRootEvent
 import org.joda.time.DateTime
 import play.api.libs.json._
 import library.joda.json.jsonDateTimeFormat
 
-sealed trait MemberDomainEvent extends DomainEvent
+sealed trait MemberDomainEvent extends AggregateRootEvent {
+  def id: MemberId
+}
 
 case class MemberCreated(
   id: MemberId,
