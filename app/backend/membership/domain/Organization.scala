@@ -1,6 +1,7 @@
 package backend.membership.domain
 
 import backend.common.types.{OrganizationId, OrganizationName}
+import backend.membership.api.event.{OrganizationCreated, OrganizationEvent, OwnersCountDecreased, OwnersCountIncreased}
 import library.error.ForbiddenException
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import library.validation.{DefaultMessage, StringValidatable}
@@ -8,8 +9,8 @@ import play.api.libs.json.{JsNumber, JsString, Reads, Writes}
 
 import scala.util.Try
 
-case class Organization private(id: OrganizationId, name: OrganizationName, ownersCount: Int, aggregateRootInfo: AggregateRootInfo[OrganizationDomainEvent])
-  extends AggregateRoot[Organization, OrganizationId, OrganizationDomainEvent] {
+case class Organization private(id: OrganizationId, name: OrganizationName, ownersCount: Int, aggregateRootInfo: AggregateRootInfo[OrganizationEvent])
+  extends AggregateRoot[Organization, OrganizationId, OrganizationEvent] {
 
   def increaseOwnersCount: Organization = applyNewChange(OwnersCountIncreased(id, ownersCount + 1))
 
@@ -20,7 +21,7 @@ case class Organization private(id: OrganizationId, name: OrganizationName, owne
     applyNewChange(OwnersCountDecreased(id, ownersCount - 1))
   })
 
-  override def applyEvent(event: OrganizationDomainEvent): Organization = {
+  override def applyEvent(event: OrganizationEvent): Organization = {
     event match {
       case e: OrganizationCreated => Organization(e.id, e.name, 0, aggregateRootInfo)
       case e: OwnersCountIncreased => copy(ownersCount = e.totalOwnersCount)
@@ -30,7 +31,7 @@ case class Organization private(id: OrganizationId, name: OrganizationName, owne
 
   override def idAsLong: Long = id.value
 
-  override def copyWithInfo(info: AggregateRootInfo[OrganizationDomainEvent]): Organization = copy(aggregateRootInfo = info)
+  override def copyWithInfo(info: AggregateRootInfo[OrganizationEvent]): Organization = copy(aggregateRootInfo = info)
 }
 
 object Organization {

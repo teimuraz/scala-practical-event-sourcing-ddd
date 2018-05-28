@@ -5,4 +5,5 @@ import library.messaging.Topic
 import library.repository.RepComponents
 
 @Singleton
-class MemberApiEventTopic extends Topic[MemberApiEvent, RepComponents]
+class MemberEventTopic extends Topic[MemberEvent, RepComponents]
+

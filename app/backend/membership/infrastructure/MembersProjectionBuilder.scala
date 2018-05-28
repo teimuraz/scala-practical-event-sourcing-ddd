@@ -6,17 +6,18 @@ import library.jooq.{Db, JooqRepositorySupport}
 import library.messaging.{Subscriber, Topic}
 import library.repository.RepComponents
 import backend.jooq.generated.Tables.MEMBERSHIP_MEMBERS
+import backend.membership.api.event._
 import backend.membership.domain._
 
 @Singleton
 class MembersProjectionBuilder @Inject()
-    (memberTopic: MemberDomainEventTopic)
-  extends Subscriber[MemberDomainEvent, RepComponents]
+    (memberTopic: MemberEventTopic)
+  extends Subscriber[MemberEvent, RepComponents]
   with JooqRepositorySupport {
 
-  override def topic: Topic[MemberDomainEvent, RepComponents] = memberTopic
+  override def topic: Topic[MemberEvent, RepComponents] = memberTopic
 
-  override def handle(message: MemberDomainEvent)(implicit additionalData: RepComponents): Unit = {
+  override def handle(message: MemberEvent)(implicit additionalData: RepComponents): Unit = {
     message match {
       case e: MemberCreated => handle(e)
       case e: MemberNameChanged => handle(e)

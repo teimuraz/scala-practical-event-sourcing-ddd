@@ -1,11 +1,10 @@
 package backend.membership.domain
 
 import backend.common.types._
+import backend.membership.api.event._
 import library.error.{ForbiddenException, ValidationException}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
-import library.validation.{DefaultMessage, StringValidatable}
 import org.joda.time.DateTime
-import play.api.libs.json._
 
 import scala.util.Try
 
@@ -18,8 +17,8 @@ case class Member private(
     role: MemberRole,
     organizationId: OrganizationId,
     becameMemberAt: DateTime,
-    aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
-) extends AggregateRoot[Member, MemberId, MemberDomainEvent] {
+    aggregateRootInfo: AggregateRootInfo[MemberEvent]
+) extends AggregateRoot[Member, MemberId, MemberEvent] {
 
   def changeName(newName: MemberName): Member = {
     applyNewChange(MemberNameChanged(id, newName))
@@ -83,7 +82,7 @@ case class Member private(
     }
   })
 
-  override def applyEvent(event: MemberDomainEvent): Member = {
+  override def applyEvent(event: MemberEvent): Member = {
     event match {
       case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.organizationId, e.becameMemberAt, aggregateRootInfo)
       case e: MemberNameChanged => copy(name = e.name)
@@ -95,7 +94,7 @@ case class Member private(
     }
   }
 
-  override def copyWithInfo(info: AggregateRootInfo[MemberDomainEvent]): Member = copy(aggregateRootInfo = info)
+  override def copyWithInfo(info: AggregateRootInfo[MemberEvent]): Member = copy(aggregateRootInfo = info)
   override def idAsLong: Long = id.value
 }
 
@@ -107,13 +106,3 @@ object Member {
 
   val empty: Member = Member(MemberId(0), MemberName("", validate = false), Email("", validate = false), StandardMember, OrganizationId(0), DateTime.now, AggregateRootInfo(Nil, 0))
 }
-
-
-
-
-
-
-
-
-
-

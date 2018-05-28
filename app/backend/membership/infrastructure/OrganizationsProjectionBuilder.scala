@@ -2,6 +2,7 @@ package backend.membership.infrastructure
 
 import backend.common.types.OrganizationId
 import backend.jooq.generated.Tables.MEMBERSHIP_ORGANIZATIONS
+import backend.membership.api.event._
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.jooq.JooqRepositorySupport
@@ -10,13 +11,13 @@ import library.repository.RepComponents
 
 @Singleton
 class OrganizationsProjectionBuilder @Inject()
-    (organizationEventsTopic: OrganizationDomainEventTopic)
-  extends Subscriber[OrganizationDomainEvent, RepComponents]
+    (organizationEventsTopic: OrganizationEventTopic)
+  extends Subscriber[OrganizationEvent, RepComponents]
   with JooqRepositorySupport {
 
-  override def topic: OrganizationDomainEventTopic = organizationEventsTopic
+  override def topic: OrganizationEventTopic = organizationEventsTopic
 
-  override def handle(message: OrganizationDomainEvent)(implicit additionalData: RepComponents): Unit = {
+  override def handle(message: OrganizationEvent)(implicit additionalData: RepComponents): Unit = {
     message match {
       case e: OrganizationCreated => handle(e)
       case e: OwnersCountIncreased => handle(e)

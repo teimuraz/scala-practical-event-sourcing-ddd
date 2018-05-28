@@ -1,6 +1,7 @@
 package backend.membership.infrastructure
 
 import backend.common.types.{MemberId, Owner}
+import backend.membership.api.event._
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.error.InternalErrorException
@@ -11,11 +12,11 @@ import scala.util.{Failure, Success}
 
 @Singleton
 class OrganizationOwnersCountUpdater @Inject()
-    (memberDomainEventTopic: MemberDomainEventTopic,
+    (memberDomainEventTopic: MemberEventTopic,
     organizationRepository: OrganizationRepository,
     memberRepository: MemberRepository)
-  extends Subscriber[MemberDomainEvent, RepComponents] {
-  override def topic: Topic[MemberDomainEvent, RepComponents] = memberDomainEventTopic
+  extends Subscriber[MemberEvent, RepComponents] {
+  override def topic: Topic[MemberEvent, RepComponents] = memberDomainEventTopic
 
   /**
    * Handle event in the same thread it was published
@@ -23,7 +24,7 @@ class OrganizationOwnersCountUpdater @Inject()
    * @param message
    * @param additionalData
    */
-  override def handle(message: MemberDomainEvent)(implicit additionalData: RepComponents): Unit = {
+  override def handle(message: MemberEvent)(implicit additionalData: RepComponents): Unit = {
     message match {
       case e: MemberCreated => if (e.role == Owner) {
         changeOrganizationOwnersCount(e.id, Increase)

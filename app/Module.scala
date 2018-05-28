@@ -1,6 +1,6 @@
 import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
-import backend.membership.domain.{MemberDomainEventTopic, MemberRepository, OrganizationRepository}
+import backend.membership.domain.{MemberRepository, OrganizationRepository}
 import backend.membership.infrastructure._
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.{Db, TransactionManager}
@@ -28,7 +28,6 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
     bind(classOf[MemberRepository]).to(classOf[EventSourcedMemberRepository])
-    bind(classOf[MemberDomainEventToApiEventTranslator]).asEagerSingleton()
 
     bind(classOf[OrganizationRepository]).to(classOf[EventSourcedOrganizationRepository])
     bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()

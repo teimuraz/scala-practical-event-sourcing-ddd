@@ -1,9 +1,8 @@
-package backend.membership.domain
+package backend.membership.api.event
 
 import javax.inject.Singleton
 import library.messaging.Topic
 import library.repository.RepComponents
 
 @Singleton
-class MemberDomainEventTopic extends Topic[MemberDomainEvent, RepComponents]
-
+class OrganizationEventTopic extends Topic[OrganizationEvent, RepComponents]
