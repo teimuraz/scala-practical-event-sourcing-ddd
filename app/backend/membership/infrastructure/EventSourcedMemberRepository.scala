@@ -1,7 +1,7 @@
 package backend.membership.infrastructure
 
 import backend.common.AggregateTypeRegistry
-import backend.common.types.MemberId
+import backend.common.types.member.MemberId
 import backend.membership.domain.{Member, MemberRepository}
 import javax.inject
 import javax.inject.Inject

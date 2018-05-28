@@ -1,7 +1,7 @@
 package backend.membership.api
 
 import backend.auth.AuthContext
-import backend.common.types.MemberRole
+import backend.common.types.member.MemberRole
 import org.joda.time.DateTime
 
 import scala.concurrent.Future

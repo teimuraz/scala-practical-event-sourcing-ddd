@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.types.{MemberId, MemberRole}
+import backend.common.types.member.{MemberId, MemberRole}
 import javax.inject.{Inject, Singleton}
 import library.jooq.{Db, JooqRepositorySupport}
 import library.messaging.{Subscriber, Topic}

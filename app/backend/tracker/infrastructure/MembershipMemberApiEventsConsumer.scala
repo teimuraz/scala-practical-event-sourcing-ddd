@@ -1,6 +1,6 @@
 package backend.tracker.infrastructure
 
-import backend.common.types.MemberId
+import backend.common.types.member.MemberId
 import backend.membership.api.event.MemberEventTopic
 import javax.inject.{Inject, Singleton}
 import library.messaging.{Subscriber, Topic}

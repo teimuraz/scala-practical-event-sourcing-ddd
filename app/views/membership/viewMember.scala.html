@@ -1,7 +1,6 @@
 @import backend.membership.api.MemberDto
-@import backend.common.types.Owner
-@import backend.common.types.StandardMember
 @import backend.auth.AuthContext
+@import backend.common.types.member.{Owner, StandardMember}
 @import helper._
 @(member: MemberDto)(implicit assetsFinder: AssetsFinder, request: MessagesRequestHeader, context: AuthContext)
 

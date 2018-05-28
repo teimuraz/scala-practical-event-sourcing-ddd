@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.types.{MemberId, Owner}
+import backend.common.types.member.{MemberId, Owner}
 import backend.membership.api.event._
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}

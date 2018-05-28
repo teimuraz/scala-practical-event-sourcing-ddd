@@ -4,8 +4,6 @@ import backend.common.types.{OrganizationId, OrganizationName}
 import backend.membership.api.event.{OrganizationCreated, OrganizationEvent, OwnersCountDecreased, OwnersCountIncreased}
 import library.error.ForbiddenException
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
-import library.validation.{DefaultMessage, StringValidatable}
-import play.api.libs.json.{JsNumber, JsString, Reads, Writes}
 
 import scala.util.Try
 
@@ -42,9 +40,3 @@ object Organization {
 
   val empty: Organization = Organization(OrganizationId(0), OrganizationName("", validate = false), 0, AggregateRootInfo(Nil, 0))
 }
-
-
-
-
-
-

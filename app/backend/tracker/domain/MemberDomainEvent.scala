@@ -1,6 +1,7 @@
 package backend.tracker.domain
 
 import backend.common.types._
+import backend.common.types.member.{MemberId, MemberName, MemberRole}
 import julienrf.json.derived.flat
 import library.eventsourcing.AggregateRootEvent
 import org.joda.time.DateTime

@@ -1,6 +1,6 @@
 package backend.membership.api.impl
 
-import backend.common.types.MemberRole
+import backend.common.types.member.MemberRole
 import backend.membership.api.MemberDto
 import javax.inject.{Inject, Singleton}
 import library.jooq.Db

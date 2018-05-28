@@ -1,7 +1,7 @@
 package backend.tracker.infrastructure
 
 import backend.common.AggregateTypeRegistry
-import backend.common.types.MemberId
+import backend.common.types.member.MemberId
 import backend.jooq.generated.Sequences.MEMBERSHIP_MEMBERS_SEQ
 import backend.tracker.domain.{Member, MemberDomainEvent, MemberDomainEventTopic, MemberRepository}
 import javax.inject

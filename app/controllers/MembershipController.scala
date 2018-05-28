@@ -1,7 +1,7 @@
 package controllers
 
 import backend.auth.AuthContext
-import backend.common.types.Owner
+import backend.common.types.member.Owner
 import backend.membership.api.{ChangeMemberEmailReq, ChangeMemberNameReq, CreateNewMemberReq, MembershipService}
 import javax.inject.{Inject, Singleton}
 import library.error.{UserException, ValidationException}
