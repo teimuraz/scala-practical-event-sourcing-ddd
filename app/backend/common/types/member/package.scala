@@ -13,6 +13,8 @@ package object member {
     implicit val writes: Writes[MemberId] = (o: MemberId) => JsNumber(o.value)
   }
 
+  case class MemberName private(value: String) extends AnyVal
+
   object MemberName extends StringValidatable[MemberName] {
     override def notEmpty = Some(DefaultMessage)
     override def inst = new MemberName(_)
@@ -20,11 +22,11 @@ package object member {
     implicit val writes: Writes[MemberName] = (o: MemberName) => JsString(o.value)
   }
 
-  case class MemberName private(value: String) extends AnyVal
+  sealed trait MemberRole
 
-  trait MemberRole
-  case object Owner extends MemberRole
-  case object StandardMember extends MemberRole
+  final case object Owner extends MemberRole
+  final case object StandardMember extends MemberRole
+  final
   case object FormerMember extends MemberRole
 
   object MemberRole {
@@ -46,7 +48,4 @@ package object member {
     implicit val reads: Reads[MemberRole] = Reads.of[Int].map(valueOf)
     implicit val writes: Writes[MemberRole] = (o: MemberRole) => JsNumber(intValueOf(o))
   }
-
-
-
 }

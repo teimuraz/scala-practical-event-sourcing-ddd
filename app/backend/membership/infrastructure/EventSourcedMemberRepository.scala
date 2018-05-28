@@ -17,10 +17,10 @@ import scala.concurrent.Future
 
 @inject.Singleton
 class EventSourcedMemberRepository @Inject()
-    (val db: Db, memberDomainEventTopic: MemberEventTopic)
+    (val db: Db, memberEventTopic: MemberEventTopic)
   extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberEvent] {
 
-  override def topic: Option[Topic[MemberEvent, RepComponents]] = Some(memberDomainEventTopic)
+  override def topic: Option[Topic[MemberEvent, RepComponents]] = Some(memberEventTopic)
 
   override def aggregateRootType: AggregateRootType = AggregateTypeRegistry.TYPE_MEMBERSHIP_MEMBER
 

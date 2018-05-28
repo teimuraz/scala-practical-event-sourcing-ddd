@@ -1,13 +1,13 @@
-package backend.tracker.domain
+package backend.tracker.api.event
 
 import backend.common.types._
 import backend.common.types.member.{MemberId, MemberName, MemberRole}
 import backend.common.types.organization.OrganizationId
 import julienrf.json.derived.flat
 import library.eventsourcing.AggregateRootEvent
+import library.joda.json.jsonDateTimeFormat
 import org.joda.time.DateTime
 import play.api.libs.json._
-import library.joda.json.jsonDateTimeFormat
 
 sealed trait MemberDomainEvent extends AggregateRootEvent {
   def id: MemberId

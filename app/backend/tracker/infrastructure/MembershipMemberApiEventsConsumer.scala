@@ -6,6 +6,7 @@ import javax.inject.{Inject, Singleton}
 import library.messaging.{Subscriber, Topic}
 import library.repository.RepComponents
 import backend.membership.api.{event => membershipApiEvent}
+import backend.tracker.api.event._
 import backend.tracker.domain._
 import library.error.InternalErrorException
 import shapeless.Generic

@@ -9,12 +9,14 @@ import javax.inject
 import javax.inject.Inject
 import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
 import library.jooq.Db
+import library.messaging.Topic
+import library.repository.RepComponents
 import play.api.libs.json.OFormat
 
 import scala.concurrent.Future
 
 @inject.Singleton
-class EventSourcedMemberRepository @Inject()
+class EventSourcedEventRepository @Inject()
     (val db: Db)
   extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberDomainEvent] {
 
