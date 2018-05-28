@@ -1,6 +1,6 @@
 package backend.membership.infrastructure
 
-import backend.common.types.OrganizationId
+import backend.common.types.organization.OrganizationId
 import backend.jooq.generated.Tables.MEMBERSHIP_ORGANIZATIONS
 import backend.membership.api.event._
 import backend.membership.domain._

@@ -2,6 +2,7 @@ package backend.membership.infrastructure
 
 import backend.common.types._
 import backend.common.types.member.{MemberId, MemberName, Owner}
+import backend.common.types.organization.{OrganizationId, OrganizationName}
 import backend.membership.domain._
 import javax.inject.{Inject, Singleton}
 import library.jooq.{JooqRepositorySupport, TransactionManager}

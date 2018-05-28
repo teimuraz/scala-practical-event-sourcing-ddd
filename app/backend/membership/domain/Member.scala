@@ -2,6 +2,7 @@ package backend.membership.domain
 
 import backend.common.types._
 import backend.common.types.member._
+import backend.common.types.organization.OrganizationId
 import backend.membership.api.event._
 import library.error.{ForbiddenException, ValidationException}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}

@@ -1,6 +1,6 @@
 package backend.membership.api.event
 
-import backend.common.types.{OrganizationId, OrganizationName}
+import backend.common.types.organization.{OrganizationId, OrganizationName}
 import julienrf.json.derived.flat
 import library.eventsourcing.AggregateRootEvent
 import play.api.libs.json._

@@ -1,7 +1,7 @@
 package backend.membership.infrastructure
 
 import backend.common.AggregateTypeRegistry
-import backend.common.types.OrganizationId
+import backend.common.types.organization.OrganizationId
 import backend.jooq.generated.Sequences.MEMBERSHIP_ORGANIZATIONS_SEQ
 import backend.membership.api.event.{OrganizationEvent, OrganizationEventTopic}
 import backend.membership.domain._

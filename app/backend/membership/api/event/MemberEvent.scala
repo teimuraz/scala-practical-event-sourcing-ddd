@@ -2,6 +2,7 @@ package backend.membership.api.event
 
 import backend.common.types._
 import backend.common.types.member.{MemberId, MemberName, MemberRole}
+import backend.common.types.organization.OrganizationId
 import julienrf.json.derived.flat
 import library.eventsourcing.AggregateRootEvent
 import library.joda.json.jsonDateTimeFormat

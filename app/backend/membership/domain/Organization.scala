@@ -1,6 +1,6 @@
 package backend.membership.domain
 
-import backend.common.types.{OrganizationId, OrganizationName}
+import backend.common.types.organization.{OrganizationId, OrganizationName}
 import backend.membership.api.event.{OrganizationCreated, OrganizationEvent, OwnersCountDecreased, OwnersCountIncreased}
 import library.error.ForbiddenException
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}

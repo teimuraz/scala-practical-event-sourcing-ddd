@@ -2,6 +2,7 @@ package backend.tracker.domain
 
 import backend.common.types._
 import backend.common.types.member._
+import backend.common.types.organization.OrganizationId
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import org.joda.time.DateTime
 
