@@ -9,6 +9,7 @@ import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
 import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
+import backend.jooq.generated.tables.TrackerMembers
 
 import javax.annotation.Generated
 
@@ -45,6 +46,10 @@ object Indexes {
   val MEMBERSHIP_MEMBERS_PKEY = Indexes0.MEMBERSHIP_MEMBERS_PKEY
   val MEMBERSHIP_ORGANIZATIONS_PKEY = Indexes0.MEMBERSHIP_ORGANIZATIONS_PKEY
   val PLAY_EVOLUTIONS_PKEY = Indexes0.PLAY_EVOLUTIONS_PKEY
+  val TRACKER_MEMBERS_EMAIL_IDX = Indexes0.TRACKER_MEMBERS_EMAIL_IDX
+  val TRACKER_MEMBERS_NAME_IDX = Indexes0.TRACKER_MEMBERS_NAME_IDX
+  val TRACKER_MEMBERS_ORGANIZATION_ID_IDX = Indexes0.TRACKER_MEMBERS_ORGANIZATION_ID_IDX
+  val TRACKER_MEMBERS_PKEY = Indexes0.TRACKER_MEMBERS_PKEY
 
   // -------------------------------------------------------------------------
   // [#1459] distribute members to avoid static initialisers > 64kb
@@ -61,5 +66,9 @@ object Indexes {
     val MEMBERSHIP_MEMBERS_PKEY : Index = Internal.createIndex("membership_members_pkey", MembershipMembers.MEMBERSHIP_MEMBERS, Array[OrderField [_] ](MembershipMembers.MEMBERSHIP_MEMBERS.ID), true)
     val MEMBERSHIP_ORGANIZATIONS_PKEY : Index = Internal.createIndex("membership_organizations_pkey", MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS, Array[OrderField [_] ](MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS.ID), true)
     val PLAY_EVOLUTIONS_PKEY : Index = Internal.createIndex("play_evolutions_pkey", PlayEvolutions.PLAY_EVOLUTIONS, Array[OrderField [_] ](PlayEvolutions.PLAY_EVOLUTIONS.ID), true)
+    val TRACKER_MEMBERS_EMAIL_IDX : Index = Internal.createIndex("tracker_members_email_idx", TrackerMembers.TRACKER_MEMBERS, Array[OrderField [_] ](TrackerMembers.TRACKER_MEMBERS.EMAIL), false)
+    val TRACKER_MEMBERS_NAME_IDX : Index = Internal.createIndex("tracker_members_name_idx", TrackerMembers.TRACKER_MEMBERS, Array[OrderField [_] ](TrackerMembers.TRACKER_MEMBERS.NAME), false)
+    val TRACKER_MEMBERS_ORGANIZATION_ID_IDX : Index = Internal.createIndex("tracker_members_organization_id_idx", TrackerMembers.TRACKER_MEMBERS, Array[OrderField [_] ](TrackerMembers.TRACKER_MEMBERS.ORGANIZATION_ID), false)
+    val TRACKER_MEMBERS_PKEY : Index = Internal.createIndex("tracker_members_pkey", TrackerMembers.TRACKER_MEMBERS, Array[OrderField [_] ](TrackerMembers.TRACKER_MEMBERS.ID), true)
   }
 }

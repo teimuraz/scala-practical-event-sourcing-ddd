@@ -37,7 +37,7 @@ class Seeder @Inject()(
   val existingMemberOpt = Await.result(memberRepository.findById(MemberId(1)), 10 seconds)
 
   if (existingMemberOpt.isEmpty) {
-      val member = Member.create(
+      val member = Member(
         MemberId(1),
         MemberName("teimuraz"),
         Email("teimuraz.kantaria@gmail.com"),

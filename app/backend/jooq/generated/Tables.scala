@@ -45,4 +45,9 @@ object Tables {
    * The table <code>public.play_evolutions</code>.
    */
   val PLAY_EVOLUTIONS = backend.jooq.generated.tables.PlayEvolutions.PLAY_EVOLUTIONS
+
+  /**
+   * The table <code>public.tracker_members</code>.
+   */
+  val TRACKER_MEMBERS = backend.jooq.generated.tables.TrackerMembers.TRACKER_MEMBERS
 }

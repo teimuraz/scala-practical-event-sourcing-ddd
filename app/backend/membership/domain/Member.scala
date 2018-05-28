@@ -78,7 +78,7 @@ case class Member private(
 
   def createNewMember(id: MemberId, name: MemberName, email: Email): Try[Member] = Try({
     role match {
-      case Owner => Member.create(id, name, email, StandardMember, organizationId, DateTime.now())
+      case Owner => Member(id, name, email, StandardMember, organizationId, DateTime.now())
       case _ => throw new ForbiddenException("Only owner can create new members")
     }
   })
@@ -100,7 +100,7 @@ case class Member private(
 }
 
 object Member {
-  def create(id: MemberId, name: MemberName, email: Email, role: MemberRole, organizationId: OrganizationId, becameMemberAt: DateTime): Member = {
+  def apply(id: MemberId, name: MemberName, email: Email, role: MemberRole, organizationId: OrganizationId, becameMemberAt: DateTime): Member = {
     val events = List(MemberCreated(id, name, email, role, organizationId, becameMemberAt))
     Member(id, name, email, role, organizationId, becameMemberAt, AggregateRootInfo(events, 0))
   }

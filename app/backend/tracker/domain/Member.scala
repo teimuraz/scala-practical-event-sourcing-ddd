@@ -1,21 +1,28 @@
 package backend.tracker.domain
 
 import backend.common.types._
-import backend.membership.domain.MemberDomainEvent
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
 import org.joda.time.DateTime
 
-case class Member(
+case class Member private(
     id: MemberId,
     name: MemberName,
     email: Email,
-    Role: MemberRole,
+    role: MemberRole,
     organizationId: OrganizationId,
     becameMemberAt: DateTime,
     aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
 ) extends AggregateRoot[Member, MemberId, MemberDomainEvent]{
 
-  override def applyEvent(event: MemberDomainEvent): Member = ???
+  override def applyEvent(event: MemberDomainEvent): Member = event match {
+    case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.organizationId, e.becameMemberAt, aggregateRootInfo)
+    case e: MemberNameChanged => copy(name = e.name)
+    case e: MemberEmailChanged => copy(email = e.email)
+    case e: MemberBecameAnOwner => copy(role = e.role)
+    case e: MemberUnBecameAnOwner => this // do nothing
+    case e: MemberBecameAStandardMember => copy(role = e.role)
+    case e: MemberDisconnected => copy(role = FormerMember)
+  }
 
   override def idAsLong: Long = id.value
 
@@ -23,7 +30,7 @@ case class Member(
 }
 
 object Member {
-  def create(id: MemberId, name: MemberName, email: Email, role: MemberRole, organizationId: OrganizationId, becameMemberAt: DateTime): Member = {
+  def apply(id: MemberId, name: MemberName, email: Email, role: MemberRole, organizationId: OrganizationId, becameMemberAt: DateTime): Member = {
     val events = List(MemberCreated(id, name, email, role, organizationId, becameMemberAt))
     Member(id, name, email, role,  organizationId, becameMemberAt, AggregateRootInfo(events, 0))
   }

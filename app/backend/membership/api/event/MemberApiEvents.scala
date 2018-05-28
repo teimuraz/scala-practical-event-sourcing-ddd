@@ -1,6 +1,6 @@
 package backend.membership.api.event
 
-import backend.common.types.{Email, MemberId, MemberName, MemberRole}
+import backend.common.types._
 import org.joda.time.DateTime
 
 trait MemberApiEvent
@@ -10,6 +10,7 @@ case class MemberCreated(
   name: MemberName,
   email: Email,
   role: MemberRole,
+  organizationId: OrganizationId,
   becameMemberAt: DateTime
 ) extends MemberApiEvent
 
