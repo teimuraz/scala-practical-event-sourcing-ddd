@@ -1,6 +1,6 @@
 package backend.tracker.domain
 
-import backend.common.types.Issue.{IssueDescription, IssueId, IssueStatus, IssueTitle}
+import backend.common.types.Issue._
 import backend.common.types.member.MemberId
 import backend.tracker.api.event.{IssueCreated, IssueEvent}
 import library.eventsourcing.{AggregateRoot, AggregateRootInfo}
@@ -37,4 +37,6 @@ object Issue {
     val events = List(IssueCreated(id, title, description, status, assignee, createdBy, createdAt))
     Issue(id, title, description, status, assignee, createdBy, createdAt, AggregateRootInfo(events, 0))
   }
+
+  def empty = Issue(IssueId(0), IssueTitle("", validate = false), None, Open, Nil, MemberId(0), DateTime.now, AggregateRootInfo(Nil, 0))
 }

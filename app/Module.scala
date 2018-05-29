@@ -2,7 +2,8 @@ import backend.membership.api.MembershipService
 import backend.membership.api.impl.{MembershipQueryService, MembershipServiceImpl}
 import backend.membership.domain.{MemberRepository, OrganizationRepository}
 import backend.membership.infrastructure._
-import backend.tracker.infrastructure.MembershipMemberApiEventsConsumer
+import backend.tracker.domain.IssueRepository
+import backend.tracker.infrastructure.{EventSourcedIssueRepository, MembershipMemberApiEventsConsumer}
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.{Db, TransactionManager}
 import library.messaging.Topic
@@ -50,6 +51,7 @@ class Module extends AbstractModule with AkkaGuiceSupport {
 
     bind(classOf[MembershipMemberApiEventsConsumer]).asEagerSingleton()
     bind(classOf[backend.tracker.domain.MemberRepository]).to(classOf[backend.tracker.infrastructure.EventSourcedMemberRepository])
+    bind(classOf[IssueRepository]).to(classOf[EventSourcedIssueRepository])
 
     // Bind seeders after all bounded contexts, since they should be loaded after all event listeners were bound.
 

@@ -42,6 +42,11 @@ object Sequences {
   val MEMBERSHIP_ORGANIZATIONS_SEQ : Sequence[Long] = new SequenceImpl[Long]("membership_organizations_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false))
 
   /**
+   * The sequence <code>public.tracker_issues_seq</code>
+   */
+  val TRACKER_ISSUES_SEQ : Sequence[Long] = new SequenceImpl[Long]("tracker_issues_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false))
+
+  /**
    * The sequence <code>public.tracker_members_seq</code>
    */
   val TRACKER_MEMBERS_SEQ : Sequence[Long] = new SequenceImpl[Long]("tracker_members_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false))

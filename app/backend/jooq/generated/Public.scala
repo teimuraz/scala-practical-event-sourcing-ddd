@@ -9,6 +9,8 @@ import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
 import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
+import backend.jooq.generated.tables.TrackerIssueAssignees
+import backend.jooq.generated.tables.TrackerIssues
 import backend.jooq.generated.tables.TrackerMembers
 
 import java.util.ArrayList
@@ -58,6 +60,7 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
       Sequences.EVENTS_JOURNAL_EVENT_OFFSET_SEQ,
       Sequences.MEMBERSHIP_MEMBERS_SEQ,
       Sequences.MEMBERSHIP_ORGANIZATIONS_SEQ,
+      Sequences.TRACKER_ISSUES_SEQ,
       Sequences.TRACKER_MEMBERS_SEQ)
   }
 
@@ -74,6 +77,8 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
       MembershipMembers.MEMBERSHIP_MEMBERS,
       MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS,
       PlayEvolutions.PLAY_EVOLUTIONS,
+      TrackerIssueAssignees.TRACKER_ISSUE_ASSIGNEES,
+      TrackerIssues.TRACKER_ISSUES,
       TrackerMembers.TRACKER_MEMBERS)
   }
 }

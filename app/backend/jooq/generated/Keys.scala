@@ -9,12 +9,16 @@ import backend.jooq.generated.tables.EventsJournal
 import backend.jooq.generated.tables.MembershipMembers
 import backend.jooq.generated.tables.MembershipOrganizations
 import backend.jooq.generated.tables.PlayEvolutions
+import backend.jooq.generated.tables.TrackerIssueAssignees
+import backend.jooq.generated.tables.TrackerIssues
 import backend.jooq.generated.tables.TrackerMembers
 import backend.jooq.generated.tables.records.AggregateVersionsRecord
 import backend.jooq.generated.tables.records.EventsJournalRecord
 import backend.jooq.generated.tables.records.MembershipMembersRecord
 import backend.jooq.generated.tables.records.MembershipOrganizationsRecord
 import backend.jooq.generated.tables.records.PlayEvolutionsRecord
+import backend.jooq.generated.tables.records.TrackerIssueAssigneesRecord
+import backend.jooq.generated.tables.records.TrackerIssuesRecord
 import backend.jooq.generated.tables.records.TrackerMembersRecord
 
 import java.lang.Long
@@ -56,6 +60,8 @@ object Keys {
   val MEMBERSHIP_MEMBERS_PKEY = UniqueKeys0.MEMBERSHIP_MEMBERS_PKEY
   val MEMBERSHIP_ORGANIZATIONS_PKEY = UniqueKeys0.MEMBERSHIP_ORGANIZATIONS_PKEY
   val PLAY_EVOLUTIONS_PKEY = UniqueKeys0.PLAY_EVOLUTIONS_PKEY
+  val TRACKER_ISSUE_ASSIGNEES_PK = UniqueKeys0.TRACKER_ISSUE_ASSIGNEES_PK
+  val TRACKER_ISSUES_PKEY = UniqueKeys0.TRACKER_ISSUES_PKEY
   val TRACKER_MEMBERS_PKEY = UniqueKeys0.TRACKER_MEMBERS_PKEY
 
   // -------------------------------------------------------------------------
@@ -77,6 +83,8 @@ object Keys {
     val MEMBERSHIP_MEMBERS_PKEY : UniqueKey[MembershipMembersRecord] = Internal.createUniqueKey(MembershipMembers.MEMBERSHIP_MEMBERS, "membership_members_pkey", MembershipMembers.MEMBERSHIP_MEMBERS.ID)
     val MEMBERSHIP_ORGANIZATIONS_PKEY : UniqueKey[MembershipOrganizationsRecord] = Internal.createUniqueKey(MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS, "membership_organizations_pkey", MembershipOrganizations.MEMBERSHIP_ORGANIZATIONS.ID)
     val PLAY_EVOLUTIONS_PKEY : UniqueKey[PlayEvolutionsRecord] = Internal.createUniqueKey(PlayEvolutions.PLAY_EVOLUTIONS, "play_evolutions_pkey", PlayEvolutions.PLAY_EVOLUTIONS.ID)
+    val TRACKER_ISSUE_ASSIGNEES_PK : UniqueKey[TrackerIssueAssigneesRecord] = Internal.createUniqueKey(TrackerIssueAssignees.TRACKER_ISSUE_ASSIGNEES, "tracker_issue_assignees_pk", TrackerIssueAssignees.TRACKER_ISSUE_ASSIGNEES.ISSUE_ID, TrackerIssueAssignees.TRACKER_ISSUE_ASSIGNEES.MEMBER_ID)
+    val TRACKER_ISSUES_PKEY : UniqueKey[TrackerIssuesRecord] = Internal.createUniqueKey(TrackerIssues.TRACKER_ISSUES, "tracker_issues_pkey", TrackerIssues.TRACKER_ISSUES.ID)
     val TRACKER_MEMBERS_PKEY : UniqueKey[TrackerMembersRecord] = Internal.createUniqueKey(TrackerMembers.TRACKER_MEMBERS, "tracker_members_pkey", TrackerMembers.TRACKER_MEMBERS.ID)
   }
 }

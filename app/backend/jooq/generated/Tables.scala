@@ -47,6 +47,16 @@ object Tables {
   val PLAY_EVOLUTIONS = backend.jooq.generated.tables.PlayEvolutions.PLAY_EVOLUTIONS
 
   /**
+   * The table <code>public.tracker_issue_assignees</code>.
+   */
+  val TRACKER_ISSUE_ASSIGNEES = backend.jooq.generated.tables.TrackerIssueAssignees.TRACKER_ISSUE_ASSIGNEES
+
+  /**
+   * The table <code>public.tracker_issues</code>.
+   */
+  val TRACKER_ISSUES = backend.jooq.generated.tables.TrackerIssues.TRACKER_ISSUES
+
+  /**
    * The table <code>public.tracker_members</code>.
    */
   val TRACKER_MEMBERS = backend.jooq.generated.tables.TrackerMembers.TRACKER_MEMBERS
