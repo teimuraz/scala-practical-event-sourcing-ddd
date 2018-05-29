@@ -1,5 +1,6 @@
 package backend.tracker.domain
 
+import backend.common.types.Issue.{IssueDescription, IssueId, IssueTitle, Open}
 import backend.common.types._
 import backend.common.types.member._
 import backend.common.types.organization.OrganizationId
@@ -16,6 +17,10 @@ case class Member private(
     becameMemberAt: DateTime,
     aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
 ) extends AggregateRoot[Member, MemberId, MemberDomainEvent]{
+
+  def createIssue(issueId: IssueId, title: IssueTitle, description: Option[IssueDescription], assignee: List[MemberId]): Issue = {
+    Issue(issueId, title, description, Open, assignee, this.id, DateTime.now())
+  }
 
   override def applyEvent(event: MemberDomainEvent): Member = event match {
     case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.organizationId, e.becameMemberAt, aggregateRootInfo)
