@@ -5,6 +5,8 @@ import backend.membership.infrastructure._
 import backend.tracker.infrastructure.MembershipMemberApiEventsConsumer
 import com.google.inject.{AbstractModule, TypeLiteral}
 import library.jooq.{Db, TransactionManager}
+import library.messaging.Topic
+import library.repository.RepComponents
 import library.security.{BCryptPasswordEncoder, PasswordEncoder}
 import play.api.libs.concurrent.AkkaGuiceSupport
 
@@ -30,14 +32,18 @@ class Module extends AbstractModule with AkkaGuiceSupport {
 
     // Membership bounded context
 
+    bind(new TypeLiteral[Topic[backend.membership.api.event.MemberEvent, RepComponents]] {}).asEagerSingleton()
     bind(classOf[MembershipService]).to(classOf[MembershipServiceImpl])
     bind(classOf[MembersProjectionBuilder]).asEagerSingleton()
     bind(classOf[MembershipQueryService])
     bind(classOf[backend.membership.domain.MemberRepository]).to(classOf[backend.membership.infrastructure.EventSourcedMemberRepository])
 
+
+    bind(new TypeLiteral[Topic[backend.membership.api.event.OrganizationEvent, RepComponents]] {}).asEagerSingleton()
     bind(classOf[OrganizationRepository]).to(classOf[EventSourcedOrganizationRepository])
     bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()
     bind(classOf[OrganizationOwnersCountUpdater]).asEagerSingleton()
+
 
 
     // Tracker bounded context

@@ -7,11 +7,10 @@ import library.messaging.{Subscriber, Topic}
 import library.repository.RepComponents
 import backend.jooq.generated.Tables.MEMBERSHIP_MEMBERS
 import backend.membership.api.event._
-import backend.membership.domain._
 
 @Singleton
 class MembersProjectionBuilder @Inject()
-    (memberTopic: MemberEventTopic)
+    (memberTopic: Topic[MemberEvent, RepComponents])
   extends Subscriber[MemberEvent, RepComponents]
   with JooqRepositorySupport {
 

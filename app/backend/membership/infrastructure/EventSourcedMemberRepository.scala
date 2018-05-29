@@ -11,13 +11,13 @@ import library.messaging.Topic
 import library.repository.RepComponents
 import play.api.libs.json.{OFormat, Reads, Writes}
 import backend.jooq.generated.Sequences.MEMBERSHIP_MEMBERS_SEQ
-import backend.membership.api.event.{MemberEvent, MemberEventTopic}
+import backend.membership.api.event.MemberEvent
 
 import scala.concurrent.Future
 
 @inject.Singleton
 class EventSourcedMemberRepository @Inject()
-    (val db: Db, memberEventTopic: MemberEventTopic)
+    (val db: Db, memberEventTopic: Topic[MemberEvent, RepComponents])
   extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberEvent] {
 
   override def topic: Option[Topic[MemberEvent, RepComponents]] = Some(memberEventTopic)

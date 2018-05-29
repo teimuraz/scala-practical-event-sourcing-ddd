@@ -12,7 +12,7 @@ import scala.util.{Failure, Success}
 
 @Singleton
 class OrganizationOwnersCountUpdater @Inject()
-    (memberDomainEventTopic: MemberEventTopic,
+    (memberDomainEventTopic: Topic[MemberEvent, RepComponents],
     organizationRepository: OrganizationRepository,
     memberRepository: MemberRepository)
   extends Subscriber[MemberEvent, RepComponents] {
