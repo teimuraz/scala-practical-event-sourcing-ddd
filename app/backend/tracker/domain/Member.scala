@@ -15,14 +15,14 @@ case class Member private(
     role: MemberRole,
     organizationId: OrganizationId,
     becameMemberAt: DateTime,
-    aggregateRootInfo: AggregateRootInfo[MemberDomainEvent]
-) extends AggregateRoot[Member, MemberId, MemberDomainEvent]{
+    aggregateRootInfo: AggregateRootInfo[MemberEvent]
+) extends AggregateRoot[Member, MemberId, MemberEvent]{
 
   def createIssue(issueId: IssueId, title: IssueTitle, description: Option[IssueDescription], assignee: List[MemberId]): Issue = {
     Issue(issueId, title, description, Open, assignee, this.id, DateTime.now())
   }
 
-  override def applyEvent(event: MemberDomainEvent): Member = event match {
+  override def applyEvent(event: MemberEvent): Member = event match {
     case e: MemberCreated => Member(e.id, e.name, e.email, e.role, e.organizationId, e.becameMemberAt, aggregateRootInfo)
     case e: MemberNameChanged => copy(name = e.name)
     case e: MemberEmailChanged => copy(email = e.email)
@@ -34,7 +34,7 @@ case class Member private(
 
   override def idAsLong: Long = id.value
 
-  override def copyWithInfo(info: AggregateRootInfo[MemberDomainEvent]): Member = copy(aggregateRootInfo = info)
+  override def copyWithInfo(info: AggregateRootInfo[MemberEvent]): Member = copy(aggregateRootInfo = info)
 }
 
 object Member {

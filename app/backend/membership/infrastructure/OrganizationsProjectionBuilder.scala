@@ -11,11 +11,9 @@ import library.repository.RepComponents
 
 @Singleton
 class OrganizationsProjectionBuilder @Inject()
-    (organizationEventsTopic: Topic[OrganizationEvent, RepComponents])
+    (val topic: Topic[OrganizationEvent, RepComponents])
   extends Subscriber[OrganizationEvent, RepComponents]
   with JooqRepositorySupport {
-
-  override def topic: Topic[OrganizationEvent, RepComponents] = organizationEventsTopic
 
   override def handle(message: OrganizationEvent)(implicit additionalData: RepComponents): Unit = {
     message match {

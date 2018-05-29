@@ -10,11 +10,9 @@ import backend.membership.api.event._
 
 @Singleton
 class MembersProjectionBuilder @Inject()
-    (memberTopic: Topic[MemberEvent, RepComponents])
+    (val topic: Topic[MemberEvent, RepComponents])
   extends Subscriber[MemberEvent, RepComponents]
   with JooqRepositorySupport {
-
-  override def topic: Topic[MemberEvent, RepComponents] = memberTopic
 
   override def handle(message: MemberEvent)(implicit additionalData: RepComponents): Unit = {
     message match {

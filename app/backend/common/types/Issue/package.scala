@@ -37,7 +37,7 @@ package object Issue {
   final case object Closed extends IssueStatus
 
   object IssueStatus {
-    def valueOf(value: Int): IssueStatus = {
+    def valueOf(value: Short): IssueStatus = {
       value match {
         case 1 => Open
         case 100 => Closed
@@ -45,12 +45,12 @@ package object Issue {
       }
     }
 
-    def intValueOf(role: IssueStatus): Int = role match {
+    def intValueOf(status: IssueStatus): Short = status match {
       case Open => 1
       case Closed => 100
     }
 
-    implicit val reads: Reads[IssueStatus] = Reads.of[Int].map(valueOf)
-    implicit val writes: Writes[IssueStatus] = (o: IssueStatus) => JsNumber(intValueOf(o))
+    implicit val reads: Reads[IssueStatus] = Reads.of[Short].map(valueOf)
+    implicit val writes: Writes[IssueStatus] = (o: IssueStatus) => JsNumber(intValueOf(o).toInt)
   }
 }

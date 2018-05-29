@@ -22,7 +22,7 @@ class MembershipMemberApiEventsConsumer @Inject()
 
   override def handle(message: membershipApiEvent.MemberEvent)(implicit additionalData: RepComponents): Unit = {
 
-    def updateTrackerMember(event: MemberDomainEvent) = {
+    def updateTrackerMember(event: MemberEvent) = {
       val member = getMember(event.id)
       member.applyNewChange(event)
       memberRepository.save(member)
