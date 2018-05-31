@@ -4,7 +4,7 @@ import backend.common.AggregateTypeRegistry
 import backend.common.types.member.MemberId
 import backend.membership.domain.{Member, MemberRepository}
 import javax.inject
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
 import library.jooq.Db
 import library.messaging.Topic
@@ -15,9 +15,9 @@ import backend.membership.api.event.MemberEvent
 
 import scala.concurrent.Future
 
-@inject.Singleton
+@Singleton
 class EventSourcedMemberRepository @Inject()
-    (val db: Db, memberEventTopic: Topic[MemberEvent, RepComponents])
+    (val db: Db, val memberEventTopic: Topic[MemberEvent, RepComponents])
   extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberEvent] {
 
   override def topic: Option[Topic[MemberEvent, RepComponents]] = Some(memberEventTopic)

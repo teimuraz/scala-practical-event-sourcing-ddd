@@ -48,8 +48,6 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[OrganizationsProjectionBuilder]).asEagerSingleton()
     bind(classOf[OrganizationOwnersCountUpdater]).asEagerSingleton()
 
-
-
     // Tracker bounded context
 
     bind(classOf[MembershipMemberApiEventsConsumer]).asEagerSingleton()
@@ -58,6 +56,8 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(new TypeLiteral[Topic[IssueEvent, RepComponents]] {}).asEagerSingleton()
     bind(classOf[IssuesProjectionBuilder]).asEagerSingleton()
     bind(classOf[IssueService]).to(classOf[IssueServiceImpl])
+    bind(new TypeLiteral[Topic[backend.tracker.api.event.MemberEvent, RepComponents]] {}).asEagerSingleton()
+    bind(classOf[backend.tracker.infrastructure.MembersProjectionBuilder]).asEagerSingleton()
 
     // Bind seeders after all bounded contexts, since they should be loaded after all event listeners were bound.
 

@@ -9,14 +9,18 @@ import javax.inject
 import javax.inject.Inject
 import library.eventsourcing.{AggregateRootType, PgEventSourcedRepository}
 import library.jooq.Db
+import library.messaging.Topic
+import library.repository.RepComponents
 import play.api.libs.json.OFormat
 
 import scala.concurrent.Future
 
 @inject.Singleton
 class EventSourcedMemberRepository @Inject()
-    (val db: Db)
+    (val db: Db, memberEventTopic: Topic[MemberEvent, RepComponents])
   extends MemberRepository with PgEventSourcedRepository[Member, MemberId, MemberEvent] {
+
+  override def topic: Option[Topic[MemberEvent, RepComponents]] = Some(memberEventTopic)
 
   override def aggregateRootType: AggregateRootType = AggregateTypeRegistry.TYPE_TRACKER_MEMBER
 

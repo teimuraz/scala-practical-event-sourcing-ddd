@@ -10,7 +10,6 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints.nonEmpty
-import views.html.helper.form
 
 import scala.concurrent.{ExecutionContext, Future}
 
