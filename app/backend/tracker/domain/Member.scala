@@ -18,7 +18,7 @@ case class Member private(
     aggregateRootInfo: AggregateRootInfo[MemberEvent]
 ) extends AggregateRoot[Member, MemberId, MemberEvent]{
 
-  def createIssue(issueId: IssueId, title: IssueTitle, description: Option[IssueDescription], assignee: List[MemberId]): Issue = {
+  def createIssue(issueId: IssueId, title: IssueTitle, description: Option[IssueDescription], assignee: List[MemberId] = Nil): Issue = {
     Issue(issueId, title, description, Open, assignee, this.id, DateTime.now())
   }
 
