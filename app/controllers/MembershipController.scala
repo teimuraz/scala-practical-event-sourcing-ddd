@@ -1,7 +1,7 @@
 package controllers
 
 import backend.auth.AuthContext
-import backend.common.types.member.Owner
+import backend.common.types.member.{MemberId, Owner}
 import backend.membership.api.{ChangeMemberEmailReq, ChangeMemberNameReq, CreateNewMemberReq, MembershipService}
 import javax.inject.{Inject, Singleton}
 import library.error.{UserException, ValidationException}
@@ -21,7 +21,7 @@ class MembershipController @Inject()
   extends AbstractController(cc) {
 
   // Hardcode logged in member
-  implicit val authContext: AuthContext = AuthContext(1, Owner)
+  implicit val authContext: AuthContext = AuthContext(MemberId(1), Owner)
 
   def index: Action[AnyContent] = Action.async {
     membershipService.getMembers.map { members =>

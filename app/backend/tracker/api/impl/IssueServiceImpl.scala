@@ -9,13 +9,14 @@ import javax.inject.{Inject, Singleton}
 import library.error.ValidationException
 import library.jooq.TransactionManager
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class IssueServiceImpl @Inject()
     (issueRepository: IssueRepository,
     memberRepository: MemberRepository,
     transactionManager: TransactionManager)
+    (implicit ec: ExecutionContext)
   extends IssueService {
 
   override def createIssue(req: CreateIssueReq)(implicit context: AuthContext): Future[IssueDto] = {

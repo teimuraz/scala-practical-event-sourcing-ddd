@@ -102,7 +102,7 @@ class MembershipServiceImpl @Inject()
 
 
   override def makeMemberAnOwner(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
-    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val initiatorFuture = memberRepository.findById(context.currentMemberId)
     val standardMemberFuture = memberRepository.findById(MemberId(memberId))
     for {
       initiator <- initiatorFuture
@@ -125,7 +125,7 @@ class MembershipServiceImpl @Inject()
   }
 
   override def makeMemberAStandardMember(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
-    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val initiatorFuture = memberRepository.findById(context.currentMemberId)
     val targetOwnerFuture = memberRepository.findById(MemberId(memberId))
     for {
       initiator <- initiatorFuture
@@ -148,7 +148,7 @@ class MembershipServiceImpl @Inject()
   }
 
   override def disconnectMember(memberId: Long)(implicit context: AuthContext): Future[MemberDto] = {
-    val initiatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val initiatorFuture = memberRepository.findById(context.currentMemberId)
     val targetMemberFuture = memberRepository.findById(MemberId(memberId))
     for {
       initiator <- initiatorFuture
