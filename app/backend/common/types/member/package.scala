@@ -26,8 +26,7 @@ package object member {
 
   final case object Owner extends MemberRole
   final case object StandardMember extends MemberRole
-  final
-  case object FormerMember extends MemberRole
+  final case object FormerMember extends MemberRole
 
   object MemberRole {
     def valueOf(value: Int): MemberRole = {

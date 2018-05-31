@@ -5,7 +5,7 @@ level events, anw why Api level events fields are not Domain Typed.
 
 [<img src="https://img.shields.io/travis/playframework/play-scala-starter-example.svg"/>](https://travis-ci.org/playframework/play-scala-starter-example)
 
-# Upster
+# Practical Event Sourcing and Domain Driven Design in Scala
 
 This is a starter application that shows how Play works.  Please see the documentation at https://www.playframework.com/documentation/latest/Home for more details.
 

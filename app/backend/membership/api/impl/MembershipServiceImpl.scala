@@ -23,7 +23,7 @@ class MembershipServiceImpl @Inject()
   override def createNewMember(req: CreateNewMemberReq)(implicit context: AuthContext): Future[MemberDto] = {
     val memberWithSameEmailFuture = membershipQueryService.findByEmail(req.email)
     val membershipWithSameNameFuture = membershipQueryService.findByName(req.name)
-    val creatorFuture = memberRepository.findById(MemberId(context.currentMemberId))
+    val creatorFuture = memberRepository.findById(context.currentMemberId)
 
     for {
       _ <- memberWithSameEmailFuture
@@ -34,10 +34,7 @@ class MembershipServiceImpl @Inject()
         .map { memberOpt =>
           memberOpt.foreach(_ => throw new ValidationException(s"Name ${req.name} is already taken"))
         }
-      creator <- creatorFuture.map {
-        case Some(member) => member
-        case None => throw new ValidationException("Ghost cannot create a member")
-      }
+      creator <- creatorFuture.map(_.getOrElse(throw new ValidationException("Ghost cannot create a member")))
       newMemberId <- memberRepository.nextId
       memberDto <- {
         creator.createNewMember(newMemberId, MemberName(req.name), Email(req.email)) match {
